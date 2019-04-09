@@ -156,6 +156,7 @@ select {
              <th>Rank</th>
              <th>Joining Date</th>
              <th>Date of birth</th>
+             <th>Role</th>
             <th>Options</th>
         </tr>
     </thead>
@@ -177,6 +178,7 @@ select {
                    <td><?php echo $pathologist_data['rank']; ?></td>
                    <td><?php echo $pathologist_data['date_of_joining']; ?></td>
                    <td><?php echo $pathologist_data['date_of_birth']; ?></td>
+                   <td><?php echo $pathologist_data['role']; ?></td>
                   <td>
                     <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#centralModalDanger" onclick="remove_pathologist_modal('Remove','<?php echo $pathologist_data['army_no'];?>')" >Remove</a></td>
                 </tr>
@@ -312,7 +314,18 @@ select {
 </div>
    </div>
   </div>
- 
+     <div class="col-lg-6">
+         <div class="md-form">
+              <i class="fa fa-user prefix" style="position: relative;padding-right: 10px"></i>
+        <select id="role" data-selected="" style="display: inline !important;padding-right: 24px;padding-left: 20px;" name="role">
+  
+  <option value="" selected disabled>Role</option>
+  <option value="oic">OIC</option>
+    <option value="other">Other</option>             
+  </select>
+   <label for="role" style="top: -20px;color: #1E88E5;font-size: 0.8rem;">Select Role</label>
+         </div>
+     </div>
    
  </div>
  
@@ -431,6 +444,14 @@ select {
   </script>
   <script type="text/javascript">
    $(document).ready(function(){
+        $.validator.addMethod(
+        "regex",
+        function(value, element, regexp) {
+            var re = new RegExp(regexp);
+            return this.optional(element) || re.test(value);
+        },
+        "Incorrect mobile no."
+);
       $( "#loginform" ).validate({
         rules: {
           
@@ -454,15 +475,20 @@ select {
             required:true
           },
           email:{
-            required:true
+            required:true,
+            regex:"^([a-zA-Z0-9_\\-\\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
           },
           mobile:{
-            required:true
+            required:true,
+            regex:"^[6789][0-9]{9}$"
           },
           dob:{
             required:true
           },
           doj:{
+            required:true
+          },
+          role:{
             required:true
           },
           skill:{
@@ -474,6 +500,9 @@ select {
           army_no: {
             required: "Army number is required"
           },
+          role:{
+            required:"Role is required"  
+          },
           skill:{
              required: "Skill is required"
           },
@@ -484,10 +513,12 @@ select {
             required: "Last name is required"
           },
           email: {
-            required: "Email is required"
+            required: "Email is required",
+            regex:"Incorrect email value"
           },
           mobile: {
-            required: "Mobile is required"
+            required: "Mobile is required",
+            regex:"Incorrect mobile no."
           },
           dob: {
             required: "Date of birth is required"
@@ -517,12 +548,13 @@ select {
    var mobile=$('#mobile').val();
    var Rank=$('#Rank').val();
    var dob=$('#dob').val();
+   var pathologistRole=$('#role').val();
    var role="pathologist";
   
    var gender=$('input[name=gender]:checked', '#loginform').val(); 
  // alert("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
  
-   var datastring="army_no="+army_no+"&role="+role+"&password="+password+"&firstName="+fname+"&lastName="+lname+"&email="+email+"&mobile="+mobile+"&rank="+Rank+"&dob="+dob+"&addPathologist=addPathologist"+"&gender="+gender+"&doj="+doj;
+   var datastring="pathologistRole="+pathologistRole+"&army_no="+army_no+"&role="+role+"&password="+password+"&firstName="+fname+"&lastName="+lname+"&email="+email+"&mobile="+mobile+"&rank="+Rank+"&dob="+dob+"&addPathologist=addPathologist"+"&gender="+gender+"&doj="+doj;
 
      $.ajax({
       type:"POST",

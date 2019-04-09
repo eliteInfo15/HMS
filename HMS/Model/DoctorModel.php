@@ -142,11 +142,18 @@ class DoctorModel{
             return $result;
         }
 
-        public function saveOPDData($patient_id,$doctor_id,$tests,$comments) {
-            foreach ($tests as $test) {
-               $save="insert into opd values('$patient_id','$doctor_id','$test','$comments')";
+        public function saveOPDData($patient_id,$doctor_id,$tests,$comments,$category,$status,$medicine) {
+            if (count($tests)>0) {
+              foreach ($tests as $test) {
+               $save="insert into opd(patient_id,doctor_army_no,test_id,comments,category,medicine,test_completed) values('$patient_id','$doctor_id','$test','$comments','$category','$medicine','$status')";
+               $result=Database::insert($save);
+            }  
+            }
+            else{
+                $save="insert into opd(patient_id,doctor_army_no,comments,category,medicine) values('$patient_id','$doctor_id','$comments','$category','$medicine')";
                $result=Database::insert($save);
             }
+            
             return $result;
         }
         

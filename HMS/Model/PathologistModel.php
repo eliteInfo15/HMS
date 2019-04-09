@@ -11,8 +11,18 @@ class PathologistModel{
 	private $rank;
 	private $dateOfBirth;
                   private $dateOfJoining;
+                  private $pathologistRole;
                   public static $login;
-    public function __construct()
+                  
+                  public function getPathologistRole() {
+                      return $this->pathologistRole;
+                  }
+
+                  public function setPathologistRole($pathologistRole) {
+                      $this->pathologistRole = $pathologistRole;
+                  }
+
+                      public function __construct()
     {
         Database::connectDb();	
     }
@@ -101,10 +111,14 @@ class PathologistModel{
     }
 
     public function addPathologist() {
-        $addPathologist="insert into pathologist values ('$this->armyNo','$this->firstName','$this->lastName','$this->mobileNo','$this->gender','$this->email','$this->rank','$this->dateOfJoining','$this->dateOfBirth');";
+        $addPathologist="insert into pathologist values ('$this->armyNo','$this->firstName','$this->lastName','$this->mobileNo','$this->gender','$this->email','$this->rank','$this->dateOfJoining','$this->dateOfBirth','$this->pathologistRole');";
         $result=Database::insert($addPathologist);
         $result= PathologistModel::$login->addLoginInfo();
         return $result;
+        }
+        public function getPathologistRoleByArmyNo($armyNo) {
+            $get="select role from pathologist where army_no='$armyNo'";
+            return Database::read($get);
         }
         public function getAllPathologists() {
           $getAllPathologists="select * from pathologist";

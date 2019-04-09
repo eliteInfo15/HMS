@@ -15,6 +15,7 @@ class ArmyServingPersonModel{
 	private $dateOfBirth;
                   private $dateOfJoining;
                   static $armyPersonRelation;
+                  private $bloodGroup;
                   public static function getArmyPersonRelation() {
                       return self::$armyPersonRelation;
                   }
@@ -172,8 +173,11 @@ class ArmyServingPersonModel{
                     $this->dateOfJoining = $Row[9];
                     
                 }
-               
-              $query = "insert into army_serving_person values('$this->armyNo','$this->firstName','$this->lastName','$this->rank','$this->unit','$this->email','$this->gender','$this->mobileNo','$this->dateOfBirth','$this->dateOfJoining')";
+                if(isset($Row[10])) {
+                    $this->bloodGroup=$Row[10];
+                    
+                }
+              $query = "insert into army_serving_person values('$this->armyNo','$this->firstName','$this->lastName','$this->rank','$this->unit','$this->email','$this->gender','$this->mobileNo','$this->dateOfBirth','$this->dateOfJoining','$this->bloodGroup')";
               echo $query;  
                     $result = Database::insert($query);
                     if (! empty($result)) {

@@ -1,7 +1,7 @@
 <?php 
 session_start();
 require_once '../Model/LoginModel.php';
-
+require_once '../Model/PathologistModel.php';
 class LoginController{
 	public function __construct()
 	{
@@ -31,7 +31,18 @@ class LoginController{
 		   	header('Location:../View/ReceptionHome.php');
 		   }
                                      else if($role=="pathologist"){
-		   	header('Location:../View/PathologyHome.php');
+                                         $armyNo=$_SESSION["armyNumberSession"];
+                                         $pathologist=new PathologistModel();
+                                         $pathologistData=$pathologist->getPathologistRoleByArmyNo($armyNo);
+                                         $pathologistData=$pathologistData->fetch(PDO::FETCH_ASSOC);
+                                         $pathologistRole=$pathologistData["role"];
+                                         if ($pathologistRole=="oic") {
+                                             header('Location:../View/OICPathologistHome.php');
+                                         }
+                                         else{
+                                             header('Location:../View/OtherPathologistHome.php');
+                                         }
+		    
 		   }
 		   
 		}

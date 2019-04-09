@@ -21,11 +21,18 @@ class DoctorController{
         $patient_id=htmlspecialchars($_POST["patient_id"]);
         $doctorArmyNo=htmlspecialchars($_POST["doctorArmyNo"]);
         $comments=htmlspecialchars($_POST["comments"]);
-        $test_string=$_POST["test"];
-        var_dump($comments);
-         $test_array=explode(',', $test_string);
+        $category=htmlspecialchars($_POST["category"]);
+        $medicine=htmlspecialchars($_POST["medicine"]);
+        $status=0;
+        $test_array=array();
+        if (isset($_POST["test"])) {
+           $test_string=$_POST["test"];
+       
+         $test_array=explode(',', $test_string);  
+        }
+       
          
-         return $doctor->saveOPDData($patient_id, $doctorArmyNo, $test_array, $comments);
+         return $doctor->saveOPDData($patient_id, $doctorArmyNo, $test_array, $comments,$category,$status,$medicine);
     }
 }
 /* 

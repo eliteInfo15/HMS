@@ -1,5 +1,5 @@
 <?php session_start();
-
+ require_once '../Controller/PathologistController.php';
 if (isset($_SESSION["armyNumberSession"]) && isset($_SESSION["roleSession"])) {
   if ($_SESSION["roleSession"]=="admin") {
      header('location:AdminHome.php');
@@ -11,7 +11,15 @@ if (isset($_SESSION["armyNumberSession"]) && isset($_SESSION["roleSession"])) {
     header('location:ReceptionHome.php'); 
   }
    else if ($_SESSION["roleSession"]=="pathologist"){
-    header('location:PathologyHome.php'); 
+       $p=new PathologistController();
+       $pRole=$p->getPathologistRole($_SESSION["armyNumberSession"]);
+       if ($pRole=="oic") {
+            header('location:OICPathologistHome.php'); 
+       }
+       else{
+            header('location:OtherPathologistHome.php'); 
+       }
+   
   }
 }
 

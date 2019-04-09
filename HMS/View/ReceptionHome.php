@@ -129,14 +129,73 @@ select {
  require_once '../Controller/ReceptionistController.php';
 ?>
 
-<main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px">
-    <div class="row" style="background: white">
-        <div class="container text-center" style="margin-top: 30px;">
+<main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px;margin-top: 20px;background: white">
+    <!-- Nav tabs -->
+ <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+     <li class="nav-item">
+         <a class="nav-link active" id="tab1" data-toggle="tab" href="#panel5" role="tab"><i class="fa fa-eye"></i> View Patients</a>
+     </li> 
+     <li class="nav-item">
+         <a class="nav-link" id="tab2" data-toggle="tab" href="#panel6" role="tab"><i class="fa fa-pencil"></i> Add Patient</a>
+     </li>
+    
+ </ul>
+     <div class="tab-content">
+     <!--Panel 1-->
+     <div class="tab-pane fade in show active" id="panel5" role="tabpanel" aria-labelledby="tab1">
+         <br>
+           <table class="table">
+
+    <!--Table head-->
+    <thead style="background: #0D47A1" align="center">
+        <tr class="text-white">
+            <th>Patient Token</th>
+            <th>Army no.</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Relation</th>
+            <th>Department</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <!--Table head-->
+
+    <!--Table body-->
+    <tbody>
+      <?php $reception=new ReceptionistController();
+         $row=$reception->getAllPatients();
+              foreach ($row as $patient_data) {
+                ?>
+                <tr class="text-center">
+                  <td><?php echo $patient_data['token']; ?></td>
+                   <td><?php echo $patient_data['army_no']; ?></td>
+                  <td><?php echo $patient_data['relation_fname']; ?></td>
+                  <td><?php echo $patient_data['relation_lname']; ?></td>
+                  <td><?php echo $patient_data['relation']; ?></td>
+                  <td><?php echo $patient_data['dname']; ?></td>
+                  <td>
+                      <a href="PrintToken.php?token=<?php echo $patient_data['token'];?>&army_no=<?php echo $patient_data['army_no'];?>&department=<?php echo $patient_data['dname'];?>&date=<?php echo $patient_data['date'];?>&relation=<?php echo $patient_data['relation'];?>&fname=<?php echo $patient_data['relation_fname'];?>&lname=<?php echo $patient_data['relation_lname'];?>" class="btn btn-success btn-sm"  target="new">Print Receipt</a></td>
+                </tr>
+                <?php
+              }
+
+       ?>
+    </tbody>
+    <!--Table body-->
+
+</table>
+     </div>
+     <!--/.Panel 1-->
+     <!--Panel 2-->
+     <div class="tab-pane fade" id="panel6" role="tabpanel" aria-labelledby="tab2">
+         <br>
+         <div class="row">
+               <div class="container text-center" style="margin-top: 30px;">
             <h2>Add Patient</h2>
         </div>
-         	<div class="col-lg-8" style="margin: 30px auto">
+         	<div class="col-lg-8" style="margin: 10px auto">
          		<!-- Form -->
-    <form class="" style="color: #3F51B5;" id="loginform" method="post">
+       <form class="" style="color: #3F51B5;" id="loginform" method="post">
         <input type="text" id="receptionistArmyNo" name="receptionistArmyNo" style="display: none" value="<?php  echo $_SESSION["armyNumberSession"] ?>">
         <div class="row">
              <div class="col-lg-6">
@@ -267,6 +326,11 @@ select {
    </form>
          	</div>
          </div>
+     </div>
+     <!--/.Panel 2-->
+     
+ </div>
+   
 		
        <div class="modal fade" id="centralModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-notify modal-success" role="document">

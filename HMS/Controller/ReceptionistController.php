@@ -9,6 +9,10 @@ class ReceptionistController{
       $department=new DepartmentModel();
       return $department->getAllDepartments();
     }
+    public function getAllPatients() {
+        $patient=new PatientModel();
+        return $patient->getAllPatients();
+    }
     public function addPatient() {
         
        $patient=new PatientModel();

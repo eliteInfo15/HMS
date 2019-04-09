@@ -169,12 +169,12 @@ select {
                 ?>
                 <tr class="text-center">
                   <td><?php echo $doctor_data['army_no']; ?></td>
-                   <td><?php echo $doctor_data['fname']; ?></td>
-                  <td><?php echo $doctor_data['lname']; ?></td>
+                   <td><?php echo $doctor_data['dfname']; ?></td>
+                  <td><?php echo $doctor_data['dlname']; ?></td>
                   <td><?php echo $doctor_data['mobile_no']; ?></td>
                   <td><?php echo $doctor_data['gender']; ?></td>
                   <td><?php echo $doctor_data['email']; ?></td>
-                   <td><?php echo $doctor_data['rank']; ?></td>
+                   <td><?php echo $doctor_data['drank']; ?></td>
                    <td><?php echo $doctor_data['joining_date']; ?></td>
                    <td><?php echo $doctor_data['date_of_birth']; ?></td>
                   <td>
@@ -454,6 +454,14 @@ select {
   </script>
   <script type="text/javascript">
    $(document).ready(function(){
+       $.validator.addMethod(
+        "regex",
+        function(value, element, regexp) {
+            var re = new RegExp(regexp);
+            return this.optional(element) || re.test(value);
+        },
+        "Incorrect mobile no."
+);
       $( "#loginform" ).validate({
         rules: {
           
@@ -477,10 +485,12 @@ select {
             required:true
           },
           email:{
-            required:true
+            required:true,
+            regex:"^([a-zA-Z0-9_\\-\\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
           },
           mobile:{
-            required:true
+            required:true,
+            regex:"^[6789][0-9]{9}$"
           },
           dob:{
             required:true
@@ -507,10 +517,12 @@ select {
             required: "Last name is required"
           },
           email: {
-            required: "Email is required"
+            required: "Email is required",
+            regex:"Incorrect email value"
           },
           mobile: {
-            required: "Mobile is required"
+            required: "Mobile is required",
+            regex:"Incorrect Mobile number"
           },
           dob: {
             required: "Date of birth is required"

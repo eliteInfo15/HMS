@@ -66,6 +66,10 @@ class PatientModel{
         $result=Database::read($get);
         return $result;
     }
+    public function getAllPatients() {
+            $get="select * from patient,army_person_relation,department where patient.person_id=army_person_relation.person_id and date=date(now()) and patient.did=department.did";
+            return Database::read($get);
+            }
     public function setTokenNumber($did) {
         $numPatientsQuery="select count(*) as n from patient";
         $result=Database::read($numPatientsQuery);

@@ -430,6 +430,14 @@ select {
   </script>
   <script type="text/javascript">
    $(document).ready(function(){
+        $.validator.addMethod(
+        "regex",
+        function(value, element, regexp) {
+            var re = new RegExp(regexp);
+            return this.optional(element) || re.test(value);
+        },
+        "Incorrect value"
+);
       $( "#loginform" ).validate({
         rules: {
           
@@ -453,10 +461,12 @@ select {
             required:true
           },
           email:{
-            required:true
+            required:true,
+            regex:"^([a-zA-Z0-9_\\-\\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
           },
           mobile:{
-            required:true
+            required:true,
+            regex:"^[6789][0-9]{9}$"
           },
           dob:{
             required:true
@@ -482,14 +492,14 @@ select {
           lname: {
             required: "Last name is required"
           },
+          
           email: {
-            required: "Email is required"
+            required: "Email is required",
+            regex:"Incorrect email value"
           },
           mobile: {
-            required: "Mobile is required"
-          },
-          dob: {
-            required: "Date of birth is required"
+            required: "Mobile is required",
+            regex:"Incorrect mobile no."
           },
           doj: {
             required: "Date of joining is required"

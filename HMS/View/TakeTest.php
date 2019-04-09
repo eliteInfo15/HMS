@@ -1,15 +1,18 @@
 <?php session_start();
-  $armyNo=$_GET["patientArmyNo"];
-   $patientId=$_GET["patientId"];
-   $doctorArmyNo=$_GET["doctorArmyNo"];
-    $rank=$_GET["rank"];
-     $fname=$_GET["fname"];
-       $lname=$_GET["lname"];
-         $token=$_GET["token"];
+  $armyNo=$_GET["army_no"];
+   $patientId=$_GET["patient_id"];
+   $test_id=$_GET["test_id"];
+    $pathologistArmyNo=$_GET["pathologist_army_no"];
+     $patientGender=$_GET["patient_gender"];
+       $testName=$_GET["test_name"];
+         $patientName=$_GET["patient_name"];
           $relation=$_GET["relation"];
+          $age=$_GET["age"];
+          $serving_name=$_GET["serving_name"];
+          $personId=$_GET["person_id"];
    if (isset($_SESSION["armyNumberSession"]) && isset($_SESSION["roleSession"])) {
   
-       if ($_SESSION["roleSession"]!="doctor") {
+       if ($_SESSION["roleSession"]!="pathologist") {
           header('location:Login.php');
        }
 
@@ -133,18 +136,21 @@ select {
    
 
 <?php //require_once 'NavigationBar.php'; 
- require_once '../Controller/DoctorController.php';
+ require_once '../Controller/PathologistController.php';
+ $p=new PathologistController();
+ $bloodGroup=$p->getPatientBloodGroup($personId);
 ?>
 
 <main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px">
     <div class="row" style="background: white">
         <div class="container text-center" style="margin-top: 30px;">
-            <h2>Consult Patient</h2>
+            <h2>Take Test</h2>
         </div>
          	<div class="col-lg-8" style="margin: 30px auto">
          		<!-- Form -->
     <form class="" style="color: #3F51B5;" id="loginform" method="post">
         <input type="text" id="patientNo" name="patientNo" style="display: none" value="<?php  echo $patientId ?>">
+        <input type="text" id="testId" name="testId" style="display: none" value="<?php  echo $test_id ?>">
         <div class="row">
              <div class="col-lg-6">
            <div class="md-form">
@@ -159,8 +165,8 @@ select {
                  <div class="md-form">
          
          <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="patient_id" id="patient_id" readonly="" value="<?php echo $token ?>">
-        <label for="patient_id">Patient Token</label>
+         <input type="text" class="form-control" name="serving_name" id="serving_name" readonly="" value="<?php echo $serving_name ?>">
+        <label for="serving_name">Serving Person Name</label>
        
   </div>
             </div>
@@ -174,8 +180,8 @@ select {
           <div class="md-form">
          
          <i class="fa fa-user prefix"></i>
-         <input type="text" id="doctorArmyNo" class="form-control" name="doctorArmyNo" readonly="" value="<?php echo $doctorArmyNo ?>">
-         <label for="doctorArmyNo" style="margin-top: -24px;">Doctor Army No</label>
+         <input type="text" id="patient_name" class="form-control" name="patient_name" readonly="" value="<?php echo $patientName ?>">
+         <label for="patient_name" style="margin-top: -24px;">Patient Name</label>
         
   </div>
         </div>
@@ -183,8 +189,8 @@ select {
            <div class="md-form">
          
          <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="Rank" id="Rank" readonly="" value="<?php echo $rank?>">
-        <label for="Rank" style="margin-top: -24px;">Serving Person Rank</label>
+         <input type="text" class="form-control" name="relation" id="relation" readonly="" value="<?php echo $relation?>">
+        <label for="relation" style="margin-top: -24px;">Relation</label>
        
   </div>
         </div>
@@ -198,8 +204,8 @@ select {
           <div class="md-form">
          
          <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="fname" id="fname" readonly="" value="<?php echo $fname?>">
-        <label for="fname" style="margin-top: -24px;">First Name</label>
+         <input type="text" class="form-control" name="age" id="age" readonly="" value="<?php echo $age?>">
+        <label for="age" style="margin-top: -24px;">Age</label>
        
   </div>
 
@@ -208,8 +214,8 @@ select {
            <div class="md-form">
          
          <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="lname" id="lname" readonly="" value="<?php echo $lname?>">
-        <label for="lname" style="margin-top: -24px">Last Name</label>
+         <input type="text" class="form-control" name="pathologist_army_no" id="pathologist_army_no" readonly="" value="<?php echo $pathologistArmyNo?>">
+        <label for="pathologist_army_no" style="margin-top: -24px">Pathologist</label>
        
   </div>
         </div>
@@ -220,70 +226,75 @@ select {
            <div class="md-form">
          
          <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="relation" id="relation" readonly="" value="<?php echo $relation?>">
-        <label for="relation" style="margin-top: -24px">Relation</label>
+         <input type="text" class="form-control" name="test" id="test" readonly="" value="<?php echo $testName?>">
+        <label for="test" style="margin-top: -24px">Test </label>
+       
+  </div>
+        </div>
+          <div class="col-lg-6">
+           <div class="md-form">
+         
+         <i class="fa fa-user prefix"></i>
+         <input type="text" class="form-control" name="blood_group" id="blood_group" readonly="" value="<?php echo $bloodGroup?>">
+        <label for="blood_group" style="margin-top: -24px">Patient blood group </label>
        
   </div>
         </div>
       </div>
-      <div class="row">
-          <div class="col-lg-6">
-              <div class="md-form">
-  <i class="fas fa-pencil prefix"></i>
-  <textarea  class="md-textarea form-control" rows="3" id="comments" name="comments"></textarea>
-  <label for="comments">Comments</label>
-</div>
-          </div>
-          <div class="col-lg-6">
-             <div class="md-form">
-         
-         <i class="fa fa-pencil prefix"></i>
-         <input type="text" class="form-control" name="category" id="category"  >
-        <label for="category" style="margin-top: -24px">Category</label>
-       
-  </div> 
-          </div>
-          
-      </div>
-       <div class="row">
-            <div class="md-form">
-         
-         <i class="fa fa-pencil prefix"></i>
-         <input type="text" class="form-control" name="medicine" id="medicine"  >
-        <label for="medicine" style="margin-top: -24px">Medicine</label>
-       
-  </div> 
-      </div>
-     <div class="scrollable">
-         <h5>Prescribe tests</h5>
-           <div class="row">
-              
-    <?php 
-    $doctor=new DoctorController();
-    $result=$doctor->getAllTests();
-    $i=1;
-       foreach ($result as $key => $value) {
-               
-         ?>
-
-        
-      <div class="form-check col-lg-4">
-    <input type="checkbox" class="form-check-input test" id="<?php echo "test".$i ?>" name="test[]" value="<?php echo $value['test_id'] ?>">
-    <label class="form-check-label" for="<?php echo "test".$i ?>"><?php echo $value["test_name"]; ?></label>
-</div>
     
-         <?php
-       $i++;
-       }
-     ?>
-                    
-      </div> 
-   
-  </div>
+      <div class="row">
+                    <?php $pathologist=new PathologistController();
+                           $testData=$pathologist->getTestById($test_id);
+                           $data=$testData[0];
+                           
+                           for ($i = 0; $i< count($testData); $i++) {
+                               $testName=$testData[$i]["test_name"];
+                                $testId=$testData[$i]["test_id"];
+                                
+                                ?>
+                 
+                     
+                     <?php 
+                     
+                      $attributes=$testData[$i]["attributes"];
+                     
+                      $count=1;
+                                foreach ($attributes as $attribute){
+                                    
+                                    for ($j = 0; $j < count($attribute)-1; $j++) {
+                                        ?>
+          <div class="col-lg-6" style="padding: 10px;margin-bottom: 20px;">
+                     <div class="md-form" role="alert">
+                          <i class="fa fa-pencil prefix"></i>
+                          <input type="text" class="form-control <?php echo 'attribute'.($count)?>" name="<?php echo 'attribute'.($count)?>" id="<?php echo $attribute["attribute_id"]?>" >
+        <label for="<?php echo $attribute["attribute_id"]?>" style="margin-top: -24px;font-size: 12px"><?php  echo strtoupper($attribute["attribute_name"]); ?> </label>
+     
+</div>
+                 </div>
+                     <?php
+                                      
+                                    }
+                                    $count++;
+                                }
+                                ?>
+          <input type="text" name="num" id="num" value="<?php echo $count-1?>" style="display: none">
+          <?php
+                     
+                     ?>
+                     
+                 
+                 <?php
+                               
+                                echo '<br>';
+                           }
+                                 
+                          
+                  ?>
+      </div>
      
 <div class="md-form  col-lg-3 offset-md-4">
 	 
-      <input type="submit" name="add-instructor" value="Save" class="btn_login waves-effect">
+      <input type="submit" name="add-instructor" value="Send for approval" class="btn_login waves-effect">
 </div>
    </form>
          	</div>
@@ -314,7 +325,7 @@ select {
         <!--Footer-->
         <div class="modal-footer justify-content-center">
             
-            <a type="button" class="btn btn-outline-success waves-effect" href="DoctorHome.php">OK</a>
+            <a type="button" class="btn btn-outline-success waves-effect" href="OtherPathologistHome.php">OK</a>
         </div>
     </div>
     <!--/.Content-->
@@ -433,6 +444,39 @@ select {
    $(document).ready(function(){
       $( "#loginform" ).validate({
         rules: {
+            attribute1:{
+            required:true  
+          },
+          attribute2:{
+            required:true  
+          },
+          attribute3:{
+            required:true  
+          },
+          attribute4:{
+            required:true  
+          },
+          attribute5:{
+            required:true  
+          },
+          attribute6:{
+            required:true  
+          },
+          attribute7:{
+            required:true  
+          },
+          attribute8:{
+            required:true  
+          },
+          attribute9:{
+            required:true  
+          },
+          attribute10:{
+            required:true  
+          },
+          attribute11:{
+            required:true  
+          },
           comments:{
             required:true  
           },
@@ -475,6 +519,39 @@ select {
           }
         },
         messages: {
+            attribute1:{
+            required:"This attribute is required"
+          },
+          attribute2:{
+            required:"This attribute is required"
+          },
+          attribute3:{
+            required:"This attribute is required"
+          },
+          attribute4:{
+            required:"This attribute is required"
+          },
+          attribute5:{
+            required:"This attribute is required"
+          },
+          attribute6:{
+            required:"This attribute is required"
+          },
+          attribute7:{
+            required:"This attribute is required"
+          },
+          attribute8:{
+            required:"This attribute is required"
+          },
+          attribute9:{
+            required:"This attribute is required" 
+          },
+          attribute10:{
+            required:"This attribute is required" 
+          },
+          attribute11:{
+            required:"This attribute is required" 
+          },
             category:{
               required:"Comments are required"    
             },
@@ -517,31 +594,35 @@ select {
         } ,
 
      submitHandler: function(form) {
-       var patient_id= $("#patientNo").val();
-        var doctorArmyNo= $("#doctorArmyNo").val();
-       
-        var comments=$("#comments").val();
-        var category=$("#category").val();
-        var medicine=$("#medicine").val();
-        var selected_tests=new Array();
-        $(".test:checked").each(function() {
-           selected_tests.push($(this).val());
-        });
-        if (selected_tests.length>0) {
-   
-         var datastring="patient_id="+patient_id+"&doctorArmyNo="+doctorArmyNo+"&comments="+comments+"&test="+selected_tests+"&saveOPD=yes"+"&category="+category+"&medicine="+medicine;
-    
-} else {
-    var datastring="patient_id="+patient_id+"&doctorArmyNo="+doctorArmyNo+"&comments="+comments+"&saveOPD=yes"+"&category="+category+"&medicine="+medicine;
+      
+        $('#centralModalSuccess').modal('show'); 
+          var patient_id= $("#patientNo").val();
+          var test_id= $("#testId").val();
+        var pathologistArmyNo= $("#pathologist_army_no").val();
+        var numOfAttribute= $("#num").val();
+        var num=parseInt(numOfAttribute);
         
+        var test_result=new Array();
+        for (var i = 1; i <=num; i++) {
+            
+           var element= document.getElementsByClassName("attribute"+i);
+           
+             var testResult={
+            "attribute_id":$(element[0]).attr("id"),
+            "value":$(element[0]).val()
+        };
+    test_result.push(testResult);
 }
-   alert(datastring);
+ var testData= JSON.stringify(test_result);
+     var datastring="patient_id="+patient_id+"&test_id="+test_id+"&pathologistArmyNo="+pathologistArmyNo+"&testResultJson="+testData+"&addTempResult=yes";
+     console.log(datastring);
+  
         $.ajax({
       type:"POST",
-      url:"../Controller/DoctorController.php",
+      url:"../Controller/PathologistController.php",
       data:datastring,
       success:function(result){
-          
+        
           $('#centralModalSuccess').modal('show');
       }
      });

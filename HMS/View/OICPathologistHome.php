@@ -1,25 +1,23 @@
 <?php session_start();
-  $armyNo=$_GET["patientArmyNo"];
-   $patientId=$_GET["patientId"];
-   $doctorArmyNo=$_GET["doctorArmyNo"];
-    $rank=$_GET["rank"];
-     $fname=$_GET["fname"];
-       $lname=$_GET["lname"];
-         $token=$_GET["token"];
-          $relation=$_GET["relation"];
+require_once '../Controller/PathologistController.php';
    if (isset($_SESSION["armyNumberSession"]) && isset($_SESSION["roleSession"])) {
-  
-       if ($_SESSION["roleSession"]!="doctor") {
-          header('location:Login.php');
-       }
+  $p=new PathologistController();
+           $prole=$p->getPathologistRole($_SESSION["armyNumberSession"]);
+       if ($_SESSION["roleSession"]!="pathologist") {
+         
+              header('location:Login.php'); 
+            }
+            else{
+                if ($prole!="oic") {
+                    header('location:Login.php'); 
+                }
+            }
+          
 
 }
 else{
 	header('location:Login.php');
 }
-
-
-
  ?>
 <!DOCTYPE html>
 <html>
@@ -95,11 +93,12 @@ select {
   </style>
 </head>
 <body class="fixed-sn white-skin" data-gr-c-s-loaded="true" style="background:#eee">
+
 <header style="background-color: white">
 
                 <!-- Navbar -->
         <nav class="mb-1 navbar navbar-expand-lg z-depth-2 navbar-fixed-top">
-            <a class="navbar-brand" href="DoctorHome.php" style="color: black;"><img src="images/icon.png" style="width: 50px;height: 50px">  Hospital Management System</a>
+            <a class="navbar-brand" href="OICPathologistHome.php" style="color: black;"><img src="images/icon.png" style="width: 50px;height: 50px">  Hospital Management System</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fa fa-bars" style="color: black;"></i>
                         </button>
@@ -131,161 +130,104 @@ select {
 
     </header>
    
-
 <?php //require_once 'NavigationBar.php'; 
- require_once '../Controller/DoctorController.php';
+ 
+ /*$doctorArmyNo=$_SESSION["armyNumberSession"];
+ $doctor=new DoctorController();
+ $deptData=$doctor->getDepartmentByDoctor($doctorArmyNo);
+ 
+ $deptIdArray=array();
+ while($data=$deptData->fetch(PDO::FETCH_ASSOC)) {
+     $did=(int)$data["did"];
+     array_push($deptIdArray, $did);
+}*/
 ?>
 
 <main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px">
     <div class="row" style="background: white">
         <div class="container text-center" style="margin-top: 30px;">
-            <h2>Consult Patient</h2>
+            <h2>Review Test</h2>
         </div>
          	<div class="col-lg-8" style="margin: 30px auto">
-         		<!-- Form -->
-    <form class="" style="color: #3F51B5;" id="loginform" method="post">
-        <input type="text" id="patientNo" name="patientNo" style="display: none" value="<?php  echo $patientId ?>">
-        <div class="row">
-             <div class="col-lg-6">
-           <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="army_no" id="army_no" readonly="" value="<?php echo $armyNo ?>">
-        <label for="army_no">Army Number</label>
-       
-  </div>
-        </div>
-            <div class="col-lg-6">
-                 <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="patient_id" id="patient_id" readonly="" value="<?php echo $token ?>">
-        <label for="patient_id">Patient Token</label>
-       
-  </div>
-            </div>
-        </div>
-        <div class="row gender-container" id="relations">
+         	
+                    <table class="table" style="width:1000px">
+
+    <!--Table head-->
+    <thead style="background: #0D47A1" align="center">
+        <tr class="text-white">
             
-        </div>
-      <div class="row">
-        
-        <div class="col-lg-6">
-          <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" id="doctorArmyNo" class="form-control" name="doctorArmyNo" readonly="" value="<?php echo $doctorArmyNo ?>">
-         <label for="doctorArmyNo" style="margin-top: -24px;">Doctor Army No</label>
-        
-  </div>
-        </div>
-       <div class="col-lg-6">
-           <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="Rank" id="Rank" readonly="" value="<?php echo $rank?>">
-        <label for="Rank" style="margin-top: -24px;">Serving Person Rank</label>
-       
-  </div>
-        </div>
-      </div>
-      <!-- Email -->
+            <th>Army No.</th>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Patient Name</th>
+             <th>Relation</th>
+            <th>Age</th>
+            <th>Patient Blood group</th>
+           
+           
+           <th>Test</th>
+            
+            <th>Options</th>
+        </tr>
+    </thead>
+    <!--Table head-->
+
+    <!--Table body-->
+    <tbody>
+      <?php
       
-
-      <!-- Password -->
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="fname" id="fname" readonly="" value="<?php echo $fname?>">
-        <label for="fname" style="margin-top: -24px;">First Name</label>
-       
-  </div>
-
-        </div>
-        <div class="col-lg-6">
-           <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="lname" id="lname" readonly="" value="<?php echo $lname?>">
-        <label for="lname" style="margin-top: -24px">Last Name</label>
-       
-  </div>
-        </div>
-      </div>
-  
-      <div class="row">
-           <div class="col-lg-6">
-           <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="relation" id="relation" readonly="" value="<?php echo $relation?>">
-        <label for="relation" style="margin-top: -24px">Relation</label>
-       
-  </div>
-        </div>
-      </div>
-      <div class="row">
-          <div class="col-lg-6">
-              <div class="md-form">
-  <i class="fas fa-pencil prefix"></i>
-  <textarea  class="md-textarea form-control" rows="3" id="comments" name="comments"></textarea>
-  <label for="comments">Comments</label>
-</div>
-          </div>
-          <div class="col-lg-6">
-             <div class="md-form">
-         
-         <i class="fa fa-pencil prefix"></i>
-         <input type="text" class="form-control" name="category" id="category"  >
-        <label for="category" style="margin-top: -24px">Category</label>
-       
-  </div> 
-          </div>
+      $p=new PathologistController();
+      $patientIdData=$p->getPatientsForApproval();
+      $patientIdArray=$patientIdData->fetchAll(PDO::FETCH_ASSOC);
+      
+     $patientInfoArray=array();
+      foreach ($patientIdArray as $patientInfo){
           
-      </div>
-       <div class="row">
-            <div class="md-form">
+          $data=$p->getPatientsForTestById($patientInfo["patient_id"],$patientInfo["test_id"]);
          
-         <i class="fa fa-pencil prefix"></i>
-         <input type="text" class="form-control" name="medicine" id="medicine"  >
-        <label for="medicine" style="margin-top: -24px">Medicine</label>
-       
-  </div> 
-      </div>
-     <div class="scrollable">
-         <h5>Prescribe tests</h5>
-           <div class="row">
-              
-    <?php 
-    $doctor=new DoctorController();
-    $result=$doctor->getAllTests();
-    $i=1;
-       foreach ($result as $key => $value) {
-               
-         ?>
-
-        
-      <div class="form-check col-lg-4">
-    <input type="checkbox" class="form-check-input test" id="<?php echo "test".$i ?>" name="test[]" value="<?php echo $value['test_id'] ?>">
-    <label class="form-check-label" for="<?php echo "test".$i ?>"><?php echo $value["test_name"]; ?></label>
-</div>
-    
-         <?php
-       $i++;
-       }
-     ?>
-                    
-      </div> 
-   
-  </div>
+         
+           array_push($patientInfoArray, $data);
+           // $patientInfoArray["test_date"]=$patientInfo["date"];
+      }
      
-<div class="md-form  col-lg-3 offset-md-4">
-	 
-      <input type="submit" name="add-instructor" value="Save" class="btn_login waves-effect">
-</div>
-   </form>
+      
+      if (isset($patientInfoArray)){
+          $i=0;
+              foreach ($patientInfoArray as $patient_data) {
+                $patient_data=$patient_data->fetch(PDO::FETCH_ASSOC);
+                $patient_data["test_date"]=$patientIdArray[$i]["date"];
+                
+                ?>
+                <tr class="text-center">
+                   
+                 <td><?php echo $patient_data['army_no']; ?></td>
+                  <td><?php echo $patient_data['rank']; ?></td>
+                   <td><?php echo $patient_data['fname'].' '.$patient_data['lname']; ?></td>
+                   <td><?php echo $patient_data["relation_fname"].' '.$patient_data["relation_lname"] ?></td>
+                  <td><?php echo $patient_data['relation']; ?></td>
+                  <td><?php 
+                  $age= date_diff(date_create($patient_data['relation_date_of_birth']), date_create('today'))->y;
+                  echo $age; ?></td>
+                  
+                   <td><?php echo $patient_data['blood_group']; ?></td>
+                     <td><?php echo $patient_data['test_name']; ?></td>
+                    
+                    
+                  
+                     <td><a href="ReviewTest.php?army_no=<?php echo $patient_data['army_no'] ?>&patient_id=<?php echo $patient_data["patient_id"]?>&test_id=<?php echo $patient_data["test_id"]?>&pathologist_army_no=<?php echo $_SESSION["armyNumberSession"]?>&patient_gender=<?php echo $patient_data["relation_gender"]?>&test_name=<?php echo $patient_data["test_name"]?>&patient_name=<?php echo $patient_data["relation_fname"].' '.$patient_data["relation_lname"]?>&age=<?php echo date_diff(date_create($patient_data['relation_date_of_birth']), date_create('today'))->y?>&relation=<?php echo $patient_data["relation"]?>&serving_name=<?php echo $patient_data['fname'].' '.$patient_data['lname']?>&person_id=<?php echo $patient_data['person_id']; ?>&test_date=<?php echo $patient_data["test_date"]?>" class="btn btn-success btn-sm" target="new">Review Test</a></td>
+               
+                    
+                </tr>
+                <?php
+                $i++;
+              }
+}
+       ?>
+    </tbody>
+    <!--Table body-->
+
+</table>
+    
          	</div>
          </div>
 		
@@ -307,14 +249,14 @@ select {
             <div class="text-center">
                 <i class="fa fa-check fa-4x mb-3 animated rotateIn"></i>
                 
-                <h3 >Saved!</h3>
+                <h3 id="patientNumber"></h3>
             </div>
         </div>
 
         <!--Footer-->
         <div class="modal-footer justify-content-center">
             
-            <a type="button" class="btn btn-outline-success waves-effect" href="DoctorHome.php">OK</a>
+            <a type="button" class="btn btn-outline-success waves-effect" href="ReceptionHome.php">OK</a>
         </div>
     </div>
     <!--/.Content-->
@@ -433,12 +375,7 @@ select {
    $(document).ready(function(){
       $( "#loginform" ).validate({
         rules: {
-          comments:{
-            required:true  
-          },
-          category:{
-            required:true  
-          },
+          
           selectbox2: {
             required: true
           },
@@ -475,12 +412,7 @@ select {
           }
         },
         messages: {
-            category:{
-              required:"Comments are required"    
-            },
-          comments:{
-            required:"Comments are required"  
-          },
+          
           army_no: {
             required: "Army number is required"
           },
@@ -517,31 +449,16 @@ select {
         } ,
 
      submitHandler: function(form) {
-       var patient_id= $("#patientNo").val();
-        var doctorArmyNo= $("#doctorArmyNo").val();
-       
-        var comments=$("#comments").val();
-        var category=$("#category").val();
-        var medicine=$("#medicine").val();
-        var selected_tests=new Array();
-        $(".test:checked").each(function() {
-           selected_tests.push($(this).val());
-        });
-        if (selected_tests.length>0) {
-   
-         var datastring="patient_id="+patient_id+"&doctorArmyNo="+doctorArmyNo+"&comments="+comments+"&test="+selected_tests+"&saveOPD=yes"+"&category="+category+"&medicine="+medicine;
-    
-} else {
-    var datastring="patient_id="+patient_id+"&doctorArmyNo="+doctorArmyNo+"&comments="+comments+"&saveOPD=yes"+"&category="+category+"&medicine="+medicine;
-        
-}
-   alert(datastring);
-        $.ajax({
+        var person_id=$('input[name=relation]:checked', '#loginform').val(); 
+        var receptionistArmyNo=$("#receptionistArmyNo").val();
+        var did=$("#selectbox2").val();
+         var datastring="personId="+person_id+"&receptionistArmyNo="+receptionistArmyNo+"&did="+did+"&addPatient=yes";
+     $.ajax({
       type:"POST",
-      url:"../Controller/DoctorController.php",
+      url:"../Controller/ReceptionistController.php",
       data:datastring,
       success:function(result){
-          
+          document.getElementById("patientNumber").innerHTML="Patient number is "+result;
           $('#centralModalSuccess').modal('show');
       }
      });
@@ -573,4 +490,3 @@ select {
 
 </body>
 </html>
-

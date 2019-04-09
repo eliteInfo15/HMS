@@ -10,6 +10,7 @@ private $lastName;
 private $dateOfBirth;
 private $relation;
 private $gender;
+private $bloodGroup;
 static $armyPerson;
 public function getArmyNo() {
     return $this->armyNo;
@@ -122,10 +123,12 @@ public static function setArmyPerson($armyPerson) {
                 if(isset($Row[5])) {
                     $this->setGender($Row[5]);
                 }
-                
+                 if(isset($Row[6])) {
+                    $this->bloodGroup=$Row[6];
+                }
                
                
-              $query = "insert into army_person_relation(army_no,relation,relation_fname,relation_lname,relation_date_of_birth,relation_gender) values('$this->armyNo','$this->relation','$this->firstName','$this->lastName','$this->dateOfBirth','$this->gender')";
+              $query = "insert into army_person_relation(army_no,relation,relation_fname,relation_lname,relation_date_of_birth,relation_gender,blood_group) values('$this->armyNo','$this->relation','$this->firstName','$this->lastName','$this->dateOfBirth','$this->gender','$this->bloodGroup')";
                   
                     $result = Database::insert($query);
                     if (! empty($result)) {

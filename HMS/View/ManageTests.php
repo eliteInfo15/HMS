@@ -143,42 +143,46 @@ select {
      <!--Panel 1-->
      <div class="tab-pane fade in show active" id="panel5" role="tabpanel" aria-labelledby="tab1">
          <br>
-           <table class="table">
-
-    <!--Table head-->
-    <thead style="background: #0D47A1" align="center">
-        <tr class="text-white">
-            <th>Test Name</th>
-            <th>Attributes</th>
+         <div class="container">
+             <div class="row">
+                  <?php $admin=new AdminController();
+                           $testData=$admin->getAllTestsData();
+                           $data=$testData[0];
+                           //var_dump($data);
+                           for ($i = 0; $i< count($testData); $i++) {
+                               $testName=$testData[$i]["test_name"];
+                                $testId=$testData[$i]["test_id"];
+                                
+                                ?>
+                 <div class="col-lg-3 z-depth-1 text-center" style="padding: 10px;margin-bottom: 20px;">
+                     <h4><?php echo strtoupper($testName);?></h4>
+                     <?php 
+                     
+                      $attributes=$testData[$i]["attributes"];
+                                foreach ($attributes as $attribute){
+                                    for ($j = 0; $j < count($attribute); $j++) {
+                                        ?>
+                     <div class="alert alert-danger" role="alert">
+     <?php  echo strtoupper($attribute["attribute_name"]); ?>
+</div>
+                     <?php
+                                      
+                                    }
+                                }
+                     
+                     ?>
+                     <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#centralModalDanger" onclick="remove_test_modal('Remove','<?php echo $testId;?>','<?php echo $testName;?>')" >Remove</a></td>
             
-            
-            <th>Options</th>
-        </tr>
-    </thead>
-    <!--Table head-->
-
-    <!--Table body-->
-    <tbody>
-      <?php $admin=new AdminController();
-         $row=$admin->getAllDepartments();
-              foreach ($row as $department_data) {
-                ?>
-                <tr class="text-center">
-                  <td><?php echo $department_data['did']; ?></td>
-                   <td><?php echo $department_data['dname']; ?></td>
-                 
-                  
-                  <td>
-                    <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#centralModalDanger" onclick="remove_department_modal('Remove','<?php echo $department_data['did'];?>')" >Remove</a></td>
-                </tr>
-                <?php
-              }
-
-       ?>
-    </tbody>
-    <!--Table body-->
-
-</table>
+                 </div>
+                 <?php
+                               
+                                echo '<br>';
+                           }
+                                 
+                          
+                  ?>
+             </div>
+         </div>
      </div>
      <!--/.Panel 1-->
      <!--Panel 2-->
@@ -286,11 +290,11 @@ select {
           <div class="modal-footer justify-content-center">
             <form method="post" id="deleteForm" action="../Controller/AdminController.php">
               <div class="md-form">
-                 <input type="text" name="remove_department_no" id="modal-input-delete" style="display: none;" >
+                 <input type="text" name="test_id" id="modal-input-delete" style="display: none;" >
               </div>
              
              <div class="md-form">
-               <button type="submit" name="removeDepartment" class="btn btn-danger">Remove <i class="fa fa-times ml-1"></i></button>
+               <button type="submit" name="removeTest" class="btn btn-danger">Remove <i class="fa fa-times ml-1"></i></button>
              </div>
                 
               
@@ -354,11 +358,11 @@ select {
         }
   </script>
   <script type="text/javascript">
-    function remove_department_modal(param1 ,param2)
+ function remove_test_modal(param1 ,param2, param3)
 {
   document.getElementById('modal-input-delete').value = param2;
   ;
-  document.getElementById('heading').innerHTML = "Really want to remove "+param2+"?";
+  document.getElementById('heading').innerHTML = "Really want to remove "+param3+" test ?";
   ;
   document.getElementById('modal-tablesLabel_question').innerHTML = param1.replace("_"," ");
 }

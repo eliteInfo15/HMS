@@ -7,6 +7,11 @@ require_once '../Model/ArmyServingPersonModel.php';
 require_once '../Model/PathologistModel.php';
 require_once '../Model/TestModel.php';
 class AdminController{
+    public function removeTest() {
+       $test= new TestModel();
+       $testId=htmlspecialchars($_POST["test_id"]);
+       return $test->removeTestData($testId);
+    }
     public function addDepertment() {
         $department=new DepartmentModel();
         $department->setDepartmentName("eye");
@@ -38,6 +43,10 @@ class AdminController{
          $result=$receptionist->addReceptionist();
          return $result;
     }
+    public function getRoleOfPathologist($armyNo) {
+        $pathologist=new PathologistModel();
+        return $pathologist->getPathologistRoleByArmyNo($armyNo);
+    }
     public function addPathologist() {
     $pathologist=new PathologistModel();
          $login=new LoginModel;
@@ -47,7 +56,7 @@ class AdminController{
          $login->setRole(htmlspecialchars($_POST["role"]));
          
          $pathologist->setLogin($login);
-        
+         $pathologist->setPathologistRole(htmlspecialchars($_POST["pathologistRole"]));
          $pathologist->setArmyNo(htmlspecialchars($_POST["army_no"]));
          $pathologist->setFirstName(htmlspecialchars($_POST["firstName"]));
          $pathologist->setLastName(htmlspecialchars($_POST["lastName"]));
@@ -148,6 +157,10 @@ class AdminController{
      $department->setDepartmentId(htmlspecialchars($_POST["remove_department_no"]));
      return $department->removeDepartment();
     }
+    public function getAllTestsData() {
+       $test= new TestModel();
+       return $test->getAllTestsWithAttributes();
+    }
 }
 
 if (isset($_POST['requestFor'])) {
@@ -198,5 +211,10 @@ echo $rs;
 if (isset($_POST['addTest'])) {
 $admin=new AdminController();
 $rs=$admin->addTest();
+header('location:../View/ManageTests.php');
+}
+if (isset($_POST['removeTest'])) {
+$admin=new AdminController();
+$rs=$admin->removeTest();
 header('location:../View/ManageTests.php');
 }
