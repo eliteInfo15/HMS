@@ -3,6 +3,12 @@ require_once '../Model/OPDModel.php';
 require_once '../Model/TestModel.php';
 require_once '../Model/PathologistModel.php';
 class PathologistController{
+    public function countTestApplicants() {
+        $test=new TestModel();
+    $patientId=  $_POST["patient_id"];
+    $testId=  $_POST["test_id"];
+       return $test->countTestApplicants($patientId, $testId);
+    }
     public function getPatientsForTest() {
       $opd=  new OPDModel();
       return $opd->getTestPatients();
@@ -72,7 +78,16 @@ class PathologistController{
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+if (isset($_POST["countTestApplicants"])) {
+   $p= new PathologistController();
+  echo  $p->countTestApplicants();
+}
+if(isset($_POST["getPatients"])){
+      $p= new PathologistController();
+      $result=$p->getPatientsForTest();
+     
+      echo json_encode($result);
+}
 if (isset($_POST["addTempResult"])) {
    $p= new PathologistController();
    $r=$p->addTempResult();

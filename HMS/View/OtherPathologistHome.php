@@ -23,6 +23,7 @@ else{
 <html>
 <head>
 	<meta charset="utf-8">
+        
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Hospital Management System</title>
@@ -37,7 +38,30 @@ else{
   
   <link rel="stylesheet" type="text/css" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.5.11.min.css?ver=4.5.11">-->
   <style type="text/css">
-  	#btn{
+      	.loader {
+                margin: 0px auto;
+  border: 6px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 6px solid #00c851;
+  width: 30px;
+  height: 30px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+.hidden{
+    display:none;
+}
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+      #btn{
   		border-radius: 30px;
   	}
   	div .card-body-cascade a:hover{
@@ -132,7 +156,6 @@ select {
    
 <?php //require_once 'NavigationBar.php'; 
  require_once '../Controller/PathologistController.php';
- 
  /*$doctorArmyNo=$_SESSION["armyNumberSession"];
  $doctor=new DoctorController();
  $deptData=$doctor->getDepartmentByDoctor($doctorArmyNo);
@@ -151,7 +174,7 @@ select {
         </div>
          	<div class="col-lg-8" style="margin: 30px auto">
          	
-                    <table class="table" style="width:1055px">
+                    <table class="table" style="width:1055px" >
 
     <!--Table head-->
     <thead style="background: #0D47A1" align="center">
@@ -163,7 +186,7 @@ select {
             <th>Patient Name</th>
              <th>Relation</th>
             <th>Age</th>
-            <th>Patient Blood group</th>
+            <th>Blood group</th>
            
             <th>Doctor Name</th>
            <th>Test</th>
@@ -174,62 +197,11 @@ select {
         </tr>
     </thead>
     <!--Table head-->
-
-    <!--Table body-->
-    <tbody>
-      <?php
-      
-      $p=new PathologistController();
-         $row=$p->getPatientsForTest();
-         
-        // var_dump($row->fetchAll(PDO::FETCH_ASSOC));
-         
-         
-              foreach ($row as $patient_data) {
-                  
-                ?>
+    <tbody id="mytable">
         
-                <tr class="text-center">
-                   
-                  <td><?php echo $patient_data['army_no']; ?></td>
-                  <td><?php echo $patient_data['rank']; ?></td>
-                   <td><?php echo $patient_data['fname'].' '.$patient_data['lname']; ?></td>
-                   <td><?php echo $patient_data["relation_fname"].' '.$patient_data["relation_lname"] ?></td>
-                  <td><?php echo $patient_data['relation']; ?></td>
-                  <td><?php 
-                  $age= date_diff(date_create($patient_data['relation_date_of_birth']), date_create('today'))->y;
-                  echo $age; ?></td>
-                  
-                   <td><?php echo $patient_data['blood_group']; ?></td>
-                    <td><?php echo $patient_data['drank'].' '.$patient_data['dfname'].' '.$patient_data['dlname']; ?></td>
-                     <td><?php echo $patient_data['test_name']; ?></td>
-                    
-                    <?php
-                    
-                    if(!is_null($patient_data["approval"])){
-                       ?>
-                     <td><a href="TakeTest.php?army_no=<?php echo $patient_data['army_no'] ?>&patient_id=<?php echo $patient_data["patient_id"]?>&test_id=<?php echo $patient_data["test_id"]?>&pathologist_army_no=<?php echo $_SESSION["armyNumberSession"]?>&patient_gender=<?php echo $patient_data["relation_gender"]?>&test_name=<?php echo $patient_data["test_name"]?>&patient_name=<?php echo $patient_data["relation_fname"].' '.$patient_data["relation_lname"]?>&age=<?php echo date_diff(date_create($patient_data['relation_date_of_birth']), date_create('today'))->y?>&relation=<?php echo $patient_data["relation"]?>&serving_name=<?php echo $patient_data['fname'].' '.$patient_data['lname']?>&person_id=<?php echo $patient_data['person_id']; ?>" class="btn btn-danger btn-sm" target="new">ReTest</a></td>
-           
-                     <?php
-                     
-                    }
-                    else{
-                        ?>
-                     <td><a href="TakeTest.php?army_no=<?php echo $patient_data['army_no'] ?>&patient_id=<?php echo $patient_data["patient_id"]?>&test_id=<?php echo $patient_data["test_id"]?>&pathologist_army_no=<?php echo $_SESSION["armyNumberSession"]?>&patient_gender=<?php echo $patient_data["relation_gender"]?>&test_name=<?php echo $patient_data["test_name"]?>&patient_name=<?php echo $patient_data["relation_fname"].' '.$patient_data["relation_lname"]?>&age=<?php echo date_diff(date_create($patient_data['relation_date_of_birth']), date_create('today'))->y?>&relation=<?php echo $patient_data["relation"]?>&serving_name=<?php echo $patient_data['fname'].' '.$patient_data['lname']?>&person_id=<?php echo $patient_data['person_id']; ?>" class="btn btn-success btn-sm" target="new">Take Test</a></td>
-            
-                     <?php
-                    }
-                    
-                    ?>
-                  
-                         </tr>
-                <?php
-              }
-
-       ?>
     </tbody>
     <!--Table body-->
-
+    
 </table>
     
          	</div>
@@ -265,7 +237,8 @@ select {
     </div>
     <!--/.Content-->
 </div>
-</div>    
+</div>   
+    
 </main>
 
 
@@ -281,99 +254,99 @@ select {
   <script type="text/javascript" src="js/mdb.min.js"></script>-->
   <script type="text/javascript" src="js/compiled.min.js"></script>
   <script type="text/javascript" src="js/jquery.validate.js"></script>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" >
+  $(document).ready(function(){
+      $(function () {
+$('[data-toggle="tooltip"]').tooltip();
+});
+  });
+  </script>
   <script>
-   $(document).ready(function(){
-       $("#getdependents").click(function() {
-            $("#unit-field").val("");
-           $("#Rank").val("");
-           $("#fname").val("");
-           $("#lname").val("");
-           $("#dob").val("");
-            $("#age").val("");
-    var army_no= $('#army_no').val();
-   
-  
-   
- // alert("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
- 
-   var datastring="army_no="+army_no+"&getDependents="+"yes";
-     $.ajax({
+  function countApplicants(patientId,testId) {
+      var n;
+       var datastring="patient_id="+patientId+"&test_id="+testId+"&countTestApplicants=yes";
+                    
+                    $.ajax({
       type:"POST",
-      url:"../Controller/ReceptionistController.php",
+      async: false,
+      url:"../Controller/PathologistController.php",
       data:datastring,
       success:function(result){
-       var person_data=JSON.parse(result);
-            //console.log(person_data);
-            var relationDiv=document.getElementById("relations");
-            while (relationDiv.firstChild) {
-    relationDiv.removeChild(relationDiv.firstChild);
-}
-            for (var i = 0; i < person_data.length; i++) {
-                div=document.createElement("div");
-                div.setAttribute("class","col-lg-3");
-               div1= document.createElement("div");
-               div1.setAttribute("class","md-form");
-               div2=document.createElement("div");
-               div2.setAttribute("class","custom-control custom-radio custom-control-inline person_radio");
-               div1.appendChild(div2);
-               div.appendChild(div1);
-               relationDiv.appendChild(div);
-                 input=document.createElement("input");
-            input.setAttribute("type","radio");
-             input.setAttribute("class","custom-control-input");
-             input.setAttribute("name","relation");
-             input.setAttribute("id","relation"+(i+1));
-            input.value=person_data[i].person_id;
-            input.style.marginRight="3rem";
-            //document.createElement("i");
-            div2.appendChild(input);
-            label=document.createElement("label");
-            label.setAttribute("class","custom-control-label hand_cursor person_id");
-            label.setAttribute("for","relation"+(i+1));
-            label.innerHTML=person_data[i].relation_fname+"("+person_data[i].relation+")";
-            div2.appendChild(label);
-            } 
-           
+         
+       n=result;
+         
       }
      });
-    });
-   }); 
- </script>
-  <script type="text/javascript">
-  $(document).ready(function() {
-      $(document).on( 'change', 'input[name=relation]', function(){
-        
-         var person_id=$('input[name=relation]:checked', '#loginform').val(); 
+    
+     return n;
+}
+  </script>
+  
+  <script type="text/javascript" >
+  $(document).ready(function(){
+     (function worker() {
        
-         var army_no= $('#army_no').val();
-         var datastring="person_id="+person_id+"&army_no="+army_no+"&getInfo="+"yes";
-        
-              $.ajax({
+        var datastring="getPatients=yes";
+  $.ajax({
       type:"POST",
-      url:"../Controller/ReceptionistController.php",
-      data:datastring,
-      success:function(result){
-       var person_data= JSON.parse(result);
-      
-           $("#unit-field").val(person_data[0].unit);
-           $("#Rank").val(person_data[0].rank);
-           $("#fname").val(person_data[0].relation_fname);
-           $("#lname").val(person_data[0].relation_lname);
-       
-           $("#dob").val(  person_data[0].relation_date_of_birth);
-           
-           var dob=$("#dob").val();
-          dob= new Date(dob);
+    url: '../Controller/PathologistController.php', 
+    data:datastring,
+    success: function(data) {
+        console.log("data started");
+       var obj= JSON.parse(data);
+      // console.log(obj);
+       if(data){
+                var len = obj.length;
+                var txt = "";
+                if(len > 0){
+                    
+                    for(var i=0;i<len;i++){
+                        console.log("data for "+i);
+                        console.log(obj[i]);
+                  var n= countApplicants(obj[i].patient_id,obj[i].test_id);
+                       console.log("apps="+n);   
+                        var dob=obj[i].relation_date_of_birth;
+          dob=  new Date(dob);
            var ageDifMs = Date.now() -dob.getTime();
     var ageDate = new Date(ageDifMs); // miliseconds from epoch
    var age= Math.abs(ageDate.getUTCFullYear() - 1970);
-   $("#age").val(age);
-      }
-     });
-      } );
-  
-      
-});
+  var url='TakeTest.php?army_no='+obj[i].army_no+'&patient_id='+obj[i].patient_id+'&test_id='+obj[i].test_id+'&pathologist_army_no='+'<?php echo $_SESSION["armyNumberSession"]?>'+'&patient_gender='+obj[i].relation_gender+'&test_name='+obj[i].test_name+'&patient_name='+obj[i].relation_fname+' '+obj[i].relation_lname+'&age='+age+'&relation='+obj[i].relation+'&serving_name='+obj[i].fname+' '+obj[i].lname+'&person_id='+obj[i].person_id;
+   if(obj[i].approval!==null){
+   var optionTd="<td><a href='"+url+"' class='btn btn-sm btn-danger' target='new'>Retest</a></td>";
+    } 
+    else{
+         
+     //console.log("n="+window.n);
+    
+     if(n>0){
+         
+          var optionTd="<td><div class='loader' data-toggle='tooltip' title='wait for OIC response' data-placement='right'></div></td>";
+    
+     }
+     else{
+       var optionTd="<td><a href='"+url+"' class='btn btn-sm btn-success' target='new'>Take test</a></td>";
+       
+     }
+           }
+    txt += "<tr class='text-center'><td>"+obj[i].army_no+'   '+n+"</td><td>"+obj[i].rank+"</td><td>"+obj[i].fname+' '+obj[i].lname+"</td><td>"+obj[i].relation_fname+' '+obj[i].relation_lname+"</td><td>"+obj[i].relation+"</td><td>"+age+"</td><td>"+obj[i].blood_group+"</td><td>"+obj[i].drank+' '+obj[i].dfname+' '+obj[i].lname+"</td><td>"+obj[i].test_name+"</td>"+optionTd+"</tr>";
+                      
+                    }
+                     console.log("data end"); 
+                    if(txt != ""){
+                       $("#mytable").empty().append(txt);
+                    }
+                }
+            }
+        //alert("hello");
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(worker, 3000);
+    }
+  });
+})();
+  });
   </script>
    <script type="text/javascript">
    $(document).ready(function(){

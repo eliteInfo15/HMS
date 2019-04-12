@@ -6,7 +6,9 @@ class OPDModel{
     }
     public function getTestPatients() {
         $get="select * from opd,army_person_relation,doctor,tests,patient,army_serving_person where test_completed=0 and army_serving_person.army_no=army_person_relation.army_no and opd.test_id is not null and opd.patient_id=patient.patient_id and opd.test_id=tests.test_id and opd.doctor_army_no=doctor.army_no and patient.person_id=army_person_relation.person_id";
-        return Database::read($get);
+       // return 
+       $data=Database::read($get);
+      return $data->fetchAll(PDO::FETCH_ASSOC);
     }
     public function getTestPatientsById($patientId,$testId) {
         $get="select * from opd,army_person_relation,doctor,tests,patient,army_serving_person where patient.patient_id='$patientId' and opd.test_id='$testId' and army_serving_person.army_no=army_person_relation.army_no and opd.test_id is not null and opd.patient_id=patient.patient_id and opd.test_id=tests.test_id and opd.doctor_army_no=doctor.army_no and patient.person_id=army_person_relation.person_id";

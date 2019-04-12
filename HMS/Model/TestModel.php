@@ -167,6 +167,12 @@ class TestModel{
         
              return $result;
     }
+    public function countTestApplicants($patientId,$testId) {
+        $countQuery="select count(*) as n from temp_patient_test_result where patient_id='$patientId' and test_id='$testId'";
+        $result=Database::read($countQuery);
+        $data=$result->fetch(PDO::FETCH_ASSOC);
+        return $data["n"];
+        }
 }
 /* 
  * To change this license header, choose License Headers in Project Properties.
