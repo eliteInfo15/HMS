@@ -1,7 +1,9 @@
-<?php session_start();
+<?php
+session_start();
+
    if (isset($_SESSION["armyNumberSession"]) && isset($_SESSION["roleSession"])) {
   
-       if ($_SESSION["roleSession"]!="admin") {
+       if ($_SESSION["roleSession"]!="doctor") {
           header('location:Login.php');
        }
 
@@ -10,35 +12,23 @@ else{
 	header('location:Login.php');
 }
 
-
-
- ?>
-<!DOCTYPE html>
+?>
 <html>
 <head>
-	<meta charset="utf-8">
+<meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Hospital Management System</title>
+  
+  <title>HMS</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="css/font-awesome.min.css">
-  <!-- Bootstrap core CSS -->
+ 	<!-- Bootstrap core CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <!-- Material Design Bootstrap -->
   <link href="css/mdb.min.css" rel="stylesheet">
-  <link href="css/compiled-4.7.6.min.css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
   
-  <!-- Your custom styles (optional) 
-  
-  <link rel="stylesheet" type="text/css" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.5.11.min.css?ver=4.5.11">-->
   <style type="text/css">
   	#btn{
-  		border-radius: 30px;
-  	}
-  	div .card-body-cascade a:hover{
-     color: white !important;
-  	}
-        	#btn{
   		border-radius: 30px;
   	}
   	.separation{
@@ -85,10 +75,13 @@ select {
     color: #757575;
 }
 
+.scrollable{
+    height: 200px; overflow-y: scroll;
+}
+
   </style>
 </head>
-<body class="fixed-sn white-skin" data-gr-c-s-loaded="true" style="background:#eee">
-
+<body class="fixed-sn white-skin" data-gr-c-s-loaded="true" style="background:#eee;">
 <header style="background-color: white">
 
                 <!-- Navbar -->
@@ -125,66 +118,75 @@ select {
 
     </header>
    
-<?php //require_once 'NavigationBar.php'; ?>
+<?php //require_once 'NavigationBar.php'; 
 
-<main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px;margin-top: 50px;">
-    <div class="row" style="background: white">
-        <div class="container text-center" style="margin-top: 30px;">
-                        <h2>Upload Excel File</h2>
-                    </div>
-         	<div class="col-lg-8" style="margin: 45px auto">
-                    
+$doctorArmyNo=$_GET["doctorId"];
+?>
+
+
+<div class="container" style="margin-top: 40px; margin-bottom: 40px;background-color: white">
+
+<!-- Nav tabs -->
+ 
+ <!-- Tab panels -->
+
+     <!--Panel 1-->
+     
+     <!--/.Panel 1-->
+     <!--Panel 2-->
+     
+         <br>
+         <div class="row">
+         	<div class="col-lg-8" style="margin: 10px auto">
          		<!-- Form -->
     <form class="" style="color: #3F51B5;" id="loginform" method="post">
         <div class="row">
              <div class="col-lg-6">
-         <div class="file-field">
-    <div class="btn btn-primary btn-sm float-left">
-      <span>Choose Army Person file</span>
-      <input type="file" name="file" id="armyPersonFile">
-    </div>
-    <div class="file-path-wrapper">
-      <input class="file-path validate" type="text" placeholder="Upload your file">
-    </div>
+           <div class="md-form">
+         
+         <i class="fa fa-pencil prefix"></i>
+        <input type="password" class="form-control" name="currentPassword" id="currentPassword">
+        <label for="currentPassword">Current Password</label>
+       
   </div>
         </div>
              <div class="col-lg-6">
+           <div class="md-form">
          
-         
-          <div class="file-field">
-    <div class="btn btn-primary btn-sm float-left">
-      <span>Choose Relation file</span>
-      <input type="file" name="relationfile" id="relationFile">
-    </div>
-    <div class="file-path-wrapper">
-      <input class="file-path validate" type="text" placeholder="Upload your file">
-    </div>
-  </div>
-  
-        </div>
-        </div>
-      <div class="row">
-        
+         <i class="fa fa-pencil prefix"></i>
+       <input type="password" class="form-control" name="newPassword" id="newPassword">
+        <label for="newPassword">New Password</label>
        
-      
-      </div>
-      <!-- Email -->
-      
-
-      <!-- Password -->
-      
- 
+  </div>
+        </div>
+        </div>
+        <div class="row">
+             <div class="col-lg-6">
+           <div class="md-form">
+         
+         <i class="fa fa-pencil prefix"></i>
+       <input type="password" class="form-control" name="confirmPassword" id="confirmPassword">
+        <label for="confirmPassword">Confirm Password</label>
+       
+  </div>
+        </div>
+        </div>
+    
      
 <div class="md-form  col-lg-3 offset-md-4">
 	 
-      <input type="submit" name="add-instructor" value="Upload Files" class="btn_login waves-effect">
+      <input type="submit" name="add-instructor" value="Change Password" class="btn_login waves-effect">
 </div>
    </form>
          	</div>
          </div>
-		
-           
-</main>
+   
+     <!--/.Panel 2-->
+     
+	
+
+</div> 
+
 
 <!-- Central Modal Medium Success -->
 <div class="modal fade" id="centralModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -193,7 +195,7 @@ select {
     <div class="modal-content">
         <!--Header-->
         <div class="modal-header">
-            <p class="heading lead">Registered</p>
+            <p class="heading lead">Changed</p>
 
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true" class="white-text">&times;</span>
@@ -203,8 +205,8 @@ select {
         <!--Body-->
         <div class="modal-body">
             <div class="text-center">
-             
-                <h3>Files upload successfully</h3>
+                <i class="fa fa-check fa-4x mb-3 animated rotateIn"></i>
+                <h3>Password changed successfully</h3>
                 
             </div>
         </div>
@@ -212,38 +214,67 @@ select {
         <!--Footer-->
         <div class="modal-footer justify-content-center">
             
-            <a  class="btn btn-outline-success waves-effect" href="ManageArmyPerson.php">OK</a>
+            <a type="button" class="btn btn-outline-success waves-effect" href="DoctorHome.php">OK</a>
         </div>
     </div>
     <!--/.Content-->
 </div>
 </div>
+<!-- Central Modal Medium Success-->
+<!-- Central Modal Medium Danger -->
+  <div class="modal fade" id="centralModalDanger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-danger" role="document">
+      <!--Content-->
+      <div class="modal-content">
+          <!--Header-->
+          <div class="modal-header">
+              <p class="heading lead">Incorrect Password</p>
+  
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="white-text">&times;</span>
+              </button>
+          </div>
+  
+          <!--Body-->
+          <div class="modal-body">
+              <div class="text-center">
+                <h4 id="heading">Please enter valid Password</h4>
+                 
+              </div>
+          </div>
+  
+          <!--Footer-->
+     
+      </div>
+      <!--/.Content-->
+  </div>
+  </div>
+  <!-- Central Modal Medium Danger-->
 
 
 <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
   
-  <!-- Bootstrap tooltips -->
- 
-  <!-- Bootstrap core JavaScript 
-  <script type="text/javascript" src="js/bootstrap.min.js">
- 
-  <script type="text/javascript" src="js/mdb.min.js"></script>-->
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/compiled.min.js"></script>
+ 
   <script type="text/javascript" src="js/jquery.validate.js"></script>
-    <script type="text/javascript">
+  
+  <script type="text/javascript">
    $(document).ready(function(){
       $( "#loginform" ).validate({
         rules: {
           
-          dname: {
+          currentPassword: {
             required: true
           },
-          year: {
+          newPassword: {
             required: true
           },
 
-          fname:{
-            required:true
+          confirmPassword:{
+            required:true,
+            equalTo : "#newPassword"
           },
           lname:{
             required:true
@@ -272,14 +303,15 @@ select {
         },
         messages: {
           
-          dname: {
-            required: "Department name is required"
+          currentPassword: {
+            required: "Password is required"
           },
-          year:{
-             required: "Year is required"
+          newPassword:{
+             required: "Password is required"
           },
-          fname: {
-            required: "First name is required"
+          confirmPassword: {
+            required: "Password is required",
+            equalTo : "Password must be same"
           },
           lname: {
             required: "Last name is required"
@@ -309,24 +341,26 @@ select {
 
      submitHandler: function(form) {
        
-   var file_data1 = $('#armyPersonFile').prop('files')[0];   
-   var file_data2 = $('#relationFile').prop('files')[0];  
-    var form_data = new FormData();                  
-    form_data.append('file', file_data1);
-    form_data.append('relationfile',file_data2);
-    //(form_data);      
-    console.log(form_data);
-    $.ajax({
-        url: '../Controller/AdminController.php', // point to server-side PHP script 
-        dataType: 'text',  // what to expect back from the PHP script, if anything
-        cache: false,
-        contentType: false,
-        processData: false,
-        data: form_data,                         
-        type: 'post',
-        success: function(php_script_response){
-           $('#centralModalSuccess').modal('show');
-        }
+         var currentPassword= $('#currentPassword').val();
+   var newPassword= $('#newPassword').val();
+  
+   
+ // //("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
+ 
+   var datastring="currentPassword="+currentPassword+"&newPassword="+newPassword+"&doctorId="+"<?php echo $_SESSION["armyNumberSession"];?>"+"&changePassword=yes";
+     $.ajax({
+      type:"POST",
+      url:"../Controller/DoctorController.php",
+      data:datastring,
+      success:function(result){
+           var res=parseInt(result);
+           if (res===0) {
+   $('#centralModalDanger').modal('show');  
+} else {
+   $('#centralModalSuccess').modal('show');  
+}
+           
+      }
      });
 
   },
@@ -353,5 +387,7 @@ select {
        );
     });
   </script>
+   
+   
 </body>
 </html>

@@ -6,7 +6,70 @@ require_once '../Model/ReceptionistModel.php';
 require_once '../Model/ArmyServingPersonModel.php';
 require_once '../Model/PathologistModel.php';
 require_once '../Model/TestModel.php';
+require_once '../Model/PatientModel.php';
+require_once '../Model/MedicineModel.php';
+require_once '../Model/DosageModel.php';
+require_once '../Model/DosageInstructionModel.php';
 class AdminController{
+    public function getPatientReportByDepartment($did) {
+       $patient= new PatientModel();
+       $result=$patient->getPatientReportByDepartment($did);
+       return $result;
+    }
+    public function getAllPatientsAnalysis() {
+        $patient=new PatientModel();
+        return $patient->getAllPatientsAnalysis();
+    }
+    public function getAllMedicines() {
+       $medicine= new MedicineModel();
+       return  $medicine->getAllMedicines();
+    }
+    public function addMedicine() {
+      $medicine= new MedicineModel();
+    $medicine->setMedicineName(htmlspecialchars($_POST["mname"]));
+    return $medicine->addMedicine();    
+    }
+     public function removeMedicine() {
+      $medicine= new MedicineModel();
+     $medicine->setMedicineId(htmlspecialchars($_POST["remove_medicine"]));
+    return $medicine->removeMedicine();    
+    }
+    public function getAllDosage() {
+      $dosage=new DosageModel();
+       return  $dosage->getAllDosage();
+    }
+    public function addDosage() {
+     $dosage=new DosageModel();
+    $dosage->setDosage(htmlspecialchars($_POST["dosage"]));
+    return $dosage->addDosage();   
+    }
+     public function removeDosage() {
+     $dosage=new DosageModel();
+     $dosage->setDosageId(htmlspecialchars($_POST["remove_dosage"]));
+    return $dosage->removeDosage();    
+    }
+    public function getAllInstruction() {
+      $instruction=new InstructionModel();
+       return  $instruction->getAllInstructions();
+    }
+    public function addInstruction() {
+     $instruction=new InstructionModel();
+    $instruction->setInstruction(htmlspecialchars($_POST["instruction"]));
+    return $instruction->addInstruction();  
+    }
+     public function removeInstruction() {
+    $instruction=new InstructionModel();
+     $instruction->setInstructionId(htmlspecialchars($_POST["remove_instruction"]));
+    return $instruction->removeInstruction();    
+    }
+    public function getDepartmentWiseNumberOfPatients() {
+        $patient=new PatientModel();
+        return $patient->getDepartmentWiseNumberOfPatients();
+    }
+    public function getDepartmentWiseNumberOfPatientsByMonth($month) {
+        $patient=new PatientModel();
+        return $patient->getDepartmentWiseNumberOfPatientsByMonth($month);
+    }
     public function removeTest() {
        $test= new TestModel();
        $testId=htmlspecialchars($_POST["test_id"]);
@@ -98,8 +161,8 @@ class AdminController{
          $doctor->setEmail(htmlspecialchars($_POST["email"]));
          $doctor->setGender(htmlspecialchars($_POST["gender"]));
          $doctor->setMobileNo(htmlspecialchars($_POST["mobile"]));
-        
-         $result=$doctor->addDoctor();
+         
+         $result=$doctor->addDoctor(htmlspecialchars($_POST["previousDoctor"]),htmlspecialchars($_POST["previousDoctorRank"]));
          return $result;
     }
     public function addArmyPerson() {
@@ -178,6 +241,36 @@ $admin=new AdminController();
 $rs=$admin->addReceptionist();
 echo $rs;
 }
+if (isset($_POST['addMedicine'])) {
+$admin=new AdminController();
+$rs=$admin->addMedicine();
+echo $rs;
+}
+if (isset($_POST['removeMedicine'])) {
+$admin=new AdminController();
+$rs=$admin->removeMedicine();
+header('location:../View/ManageMedicines.php');
+}
+if (isset($_POST['addInstruction'])) { 
+$admin=new AdminController();
+$rs=$admin->addInstruction();
+echo $rs;
+}
+if (isset($_POST['removeInstruction'])) {
+$admin=new AdminController();
+$rs=$admin->removeInstruction();
+header('location:../View/ManageDosageInstruction.php');
+}
+if (isset($_POST['addDosage'])) { 
+$admin=new AdminController();
+$rs=$admin->addDosage();
+echo $rs;
+}
+if (isset($_POST['removeDosage'])) {
+$admin=new AdminController();
+$rs=$admin->removeDosage();
+header('location:../View/ManageDosage.php');
+}
 if (isset($_POST['removeReceptionist'])) {
 $admin=new AdminController();
 $rs=$admin->removeReceptionist();
@@ -217,4 +310,9 @@ if (isset($_POST['removeTest'])) {
 $admin=new AdminController();
 $rs=$admin->removeTest();
 header('location:../View/ManageTests.php');
+}
+if (isset($_POST['showAnalysis'])) {
+$admin=new AdminController();
+$rs=$admin->getPatientReportByDepartment(htmlspecialchars($_POST["departmentId"]));
+echo json_encode($rs);
 }

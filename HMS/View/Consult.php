@@ -1,4 +1,5 @@
 <?php session_start();
+ require_once '../Controller/AdminController.php';
   $armyNo=$_GET["patientArmyNo"];
    $patientId=$_GET["patientId"];
    $doctorArmyNo=$_GET["doctorArmyNo"];
@@ -229,7 +230,7 @@ select {
       <div class="row">
           <div class="col-lg-6">
               <div class="md-form">
-  <i class="fas fa-pencil prefix"></i>
+  <i class="fa fa-pencil prefix"></i>
   <textarea  class="md-textarea form-control" rows="3" id="comments" name="comments"></textarea>
   <label for="comments">Comments</label>
 </div>
@@ -245,14 +246,107 @@ select {
           </div>
           
       </div>
-       <div class="row">
-            <div class="md-form">
+      <div class="container" style="margin-top: 20px">
+          <h5>Prescribe Medicine</h5>
+          <div class="row">
+            
+                 <div class="col-lg-4">
+                    <div class="md-form">
          
-         <i class="fa fa-pencil prefix"></i>
-         <input type="text" class="form-control" name="medicine" id="medicine"  >
-        <label for="medicine" style="margin-top: -24px">Medicine</label>
+         <i class="fa fa-medkit prefix" style="position: relative;padding-right: 10px"></i>
+        <select id="medicine" data-selected="" style="display: inline !important;padding-right: 24px;padding-left: 20px;" name="medicine">
+  
+  <option value="" selected disabled>Medicine</option>
+  <?php 
+    $admin= new AdminController();
+    $row= $admin->getAllMedicines();
+         foreach ($row as $medicine_data) {
+           
+                ?>
+               
+                  <option value="<?php echo $medicine_data['medicine_id']; ?>"><?php echo $medicine_data['medicine_name']; ?></option>
+                 
+                  
+             
+                <?php
+              }
+   ?>
+  
+</select>
+   <label for="medicine" style="top: -20px;color: #1E88E5;font-size: 0.8rem;">Select Medicine</label>
+      </div>
+          </div>
+                         <div class="col-lg-4">
+                    <div class="md-form">
+         
+         <i class="fa fa-medkit prefix" style="position: relative;padding-right: 10px"></i>
+        <select id="dosage" data-selected="" style="display: inline !important;padding-right: 24px;padding-left: 20px;" name="dosage">
+  
+  <option value="" selected disabled>Dosage</option>
+  <?php 
+    $admin= new AdminController();
+    $row= $admin->getAllDosage();
+         foreach ($row as $dosage_data) {
+           
+                ?>
+               
+                  <option value="<?php echo $dosage_data['dosage_id']; ?>"><?php echo $dosage_data['dosage']; ?></option>
+                 
+                  
+             
+                <?php
+              }
+   ?>
+  
+</select>
+   <label for="dosage" style="top: -20px;color: #1E88E5;font-size: 0.8rem;">Select Dosage</label>
+      </div>
+          </div>
+                         <div class="col-lg-4">
+                    <div class="md-form">
+         
+         <i class="fa fa-medkit prefix" style="position: relative;padding-right: 10px"></i>
+        <select id="instruction" data-selected="" style="display: inline !important;padding-right: 24px;padding-left: 20px;" name="instruction">
+  
+  <option value="" selected disabled>Instruction</option>
+  <?php 
+    $admin= new AdminController();
+    $row= $admin->getAllInstruction();
+         foreach ($row as $instruction_data) {
+           
+                ?>
+               
+                  <option value="<?php echo $instruction_data['instruction_id']; ?>"><?php echo $instruction_data['instruction']; ?></option>
+                 
+                  
+             
+                <?php
+              }
+   ?>
+  
+</select>
+   <label for="instruction" style="top: -20px;color: #1E88E5;font-size: 0.8rem;">Select Instruction</label>
+      </div>
+          </div>
+               <div class="col-lg-4">
+             <div class="md-form">
+         
+         <i class="fa fa-calendar prefix"></i>
+         <input type="text" class="form-control" name="days" id="days"  >
+        <label for="days" style="margin-top: -24px">Days</label>
        
   </div> 
+          </div>
+              <div class="col-lg-3">
+             <div class="md-form">
+         
+       
+                 <input type="button" class="form-control btn btn-danger" name="addMedicine" id="addMedicine"  value="Prescribe Medicine">
+        
+       
+  </div> 
+          </div>
+          </div>
       </div>
      <div class="scrollable">
          <h5>Prescribe tests</h5>
@@ -319,7 +413,43 @@ select {
     </div>
     <!--/.Content-->
 </div>
-</div>    
+           
+
+</div>  
+                      <div class="modal fade" id="centralModalSuccess1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-notify modal-success" role="document">
+    <!--Content-->
+    <div class="modal-content">
+        <!--Header-->
+        <div class="modal-header">
+            <p class="heading lead">Prescribed</p>
+             
+            <button type="button" id="closeBtn" class="close">
+                <span aria-hidden="true" class="white-text">&times;</span>
+            </button>
+             
+        </div>
+
+        <!--Body-->
+        <div class="modal-body">
+            <div class="text-center">
+                <i class="fa fa-check fa-4x mb-3 animated rotateIn"></i>
+                
+                <h3 >Medicine Prescribed</h3>
+            </div>
+        </div>
+
+        <!--Footer-->
+        <div class="modal-footer justify-content-center">
+            
+        <!--  
+            <a type="button" class="btn btn-outline-success waves-effect close" href="Consult.php?patientId=<?php echo $_GET['patientId'];?>&doctorArmyNo=<?php echo $_GET["doctorArmyNo"];?>&patientArmyNo=<?php echo $_GET["patientArmyNo"];?>&fname=<?php echo $_GET['fname'];?>&lname=<?php echo $_GET['lname'];?>&relation=<?php echo $_GET['relation'];?>&rank=<?php echo $_GET['rank'];?>&token=<?php echo $_GET['token'];?>">OK</a>
+        -->
+        </div>
+    </div>
+    <!--/.Content-->
+</div>
+</div>
 </main>
 
 
@@ -336,6 +466,39 @@ select {
   <script type="text/javascript" src="js/compiled.min.js"></script>
   <script type="text/javascript" src="js/jquery.validate.js"></script>
   <script>
+  $(document).ready(function(){
+      $("#closeBtn").click(function(){
+          $('#centralModalSuccess1').modal('hide');
+          $("#medicine").val("");
+          $("#dosage").val("");
+          $("#instruction").val("");
+          $("#days").val("");
+      });
+  });
+  </script>
+  <script>
+    $(document).ready(function(){
+        $("#addMedicine").click(function(){
+            var patientId=$("#patientNo").val();
+            var medicineId=$("#medicine").val();
+            var dosageId=$("#dosage").val();
+            var instructionId=$("#instruction").val();
+            var days=$("#days").val();
+            var doctorId=<?php echo $_SESSION["armyNumberSession"]?>;
+            var datastring="patientId="+patientId+"&medicineId="+medicineId+"&dosageId="+dosageId+"&instructionId="+instructionId+"&days="+days+"&prescribeMedicine=yes"+"&doctorId="+doctorId;
+                       $.ajax({
+      type:"POST",
+      url:"../Controller/DoctorController.php",
+      data:datastring,
+      success:function(result){
+         // alert(result);
+         $('#centralModalSuccess1').modal('show');
+      }
+     }); 
+    });
+    });
+  </script>
+  <script>
    $(document).ready(function(){
        $("#getdependents").click(function() {
             $("#unit-field").val("");
@@ -348,7 +511,7 @@ select {
    
   
    
- // alert("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
+ // //("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
  
    var datastring="army_no="+army_no+"&getDependents="+"yes";
      $.ajax({
@@ -522,7 +685,7 @@ select {
        
         var comments=$("#comments").val();
         var category=$("#category").val();
-        var medicine=$("#medicine").val();
+     
         var selected_tests=new Array();
         $(".test:checked").each(function() {
            selected_tests.push($(this).val());
@@ -535,13 +698,13 @@ select {
     var datastring="patient_id="+patient_id+"&doctorArmyNo="+doctorArmyNo+"&comments="+comments+"&saveOPD=yes"+"&category="+category+"&medicine="+medicine;
         
 }
-   alert(datastring);
+   
         $.ajax({
       type:"POST",
       url:"../Controller/DoctorController.php",
       data:datastring,
       success:function(result){
-          
+        // alert(result);
           $('#centralModalSuccess').modal('show');
       }
      });

@@ -368,13 +368,13 @@ select {
            var testId=$("#testId").val();
            var testDate=$("#testDate").val();
       datastring="patient_id="+patientId+"&test_id="+testId+"&denyTest=yes"+"&test_date="+testDate;
-      alert(datastring);
+     // alert(datastring);
       $.ajax({
       type:"POST",
       url:"../Controller/PathologistController.php",
       data:datastring,
       success:function(result){
-         alert(result);
+         //alert(result);
       $("#centralModalSuccess").modal("show");
       
       }

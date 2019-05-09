@@ -1,4 +1,6 @@
-<?php session_start();
+ <?php 
+
+session_start();
    if (isset($_SESSION["armyNumberSession"]) && isset($_SESSION["roleSession"])) {
   
        if ($_SESSION["roleSession"]!="admin") {
@@ -10,35 +12,27 @@ else{
 	header('location:Login.php');
 }
 
-
+require '../Controller/AdminController.php';
 
  ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+<meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Hospital Management System</title>
+  
+  <title>HMS</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="css/font-awesome.min.css">
-  <!-- Bootstrap core CSS -->
+ 	<!-- Bootstrap core CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <!-- Material Design Bootstrap -->
   <link href="css/mdb.min.css" rel="stylesheet">
-  <link href="css/compiled-4.7.6.min.css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
   
-  <!-- Your custom styles (optional) 
-  
-  <link rel="stylesheet" type="text/css" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.5.11.min.css?ver=4.5.11">-->
   <style type="text/css">
   	#btn{
-  		border-radius: 30px;
-  	}
-  	div .card-body-cascade a:hover{
-     color: white !important;
-  	}
-        	#btn{
   		border-radius: 30px;
   	}
   	.separation{
@@ -85,10 +79,13 @@ select {
     color: #757575;
 }
 
+.scrollable{
+    height: 200px; overflow-y: scroll;
+}
+
   </style>
 </head>
-<body class="fixed-sn white-skin" data-gr-c-s-loaded="true" style="background:#eee">
-
+<body class="fixed-sn white-skin" data-gr-c-s-loaded="true" style="background:#eee;">
 <header style="background-color: white">
 
                 <!-- Navbar -->
@@ -127,64 +124,97 @@ select {
    
 <?php //require_once 'NavigationBar.php'; ?>
 
-<main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px;margin-top: 50px;">
-    <div class="row" style="background: white">
-        <div class="container text-center" style="margin-top: 30px;">
-                        <h2>Upload Excel File</h2>
-                    </div>
-         	<div class="col-lg-8" style="margin: 45px auto">
-                    
+
+<div class="container" style="margin-top: 40px; margin-bottom: 40px;background-color: white">
+
+<!-- Nav tabs -->
+ <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+     <li class="nav-item">
+         <a class="nav-link active" id="tab1" data-toggle="tab" href="#panel5" role="tab"><i class="fa fa-eye"></i> View Dosage</a>
+     </li> 
+     <li class="nav-item">
+         <a class="nav-link" id="tab2" data-toggle="tab" href="#panel6" role="tab"><i class="fa fa-pencil"></i> Add Dosage</a>
+     </li>
+    
+ </ul>
+ <!-- Tab panels -->
+ <div class="tab-content">
+     <!--Panel 1-->
+     <div class="tab-pane fade in show active" id="panel5" role="tabpanel" aria-labelledby="tab1">
+         <br>
+           <table class="table">
+
+    <!--Table head-->
+    <thead style="background: #0D47A1" align="center">
+        <tr class="text-white">
+            <th>Dosage Id</th>
+            <th>Dosage name</th>
+          
+            
+            <th>Options</th>
+        </tr>
+    </thead>
+    <!--Table head-->
+
+    <!--Table body-->
+    <tbody>
+      <?php $admin=new AdminController();
+         $row=$admin->getAllDosage();
+              foreach ($row as $dosage_data) {
+                ?>
+                <tr class="text-center">
+                  <td><?php echo $dosage_data['dosage_id']; ?></td>
+                   <td><?php echo $dosage_data['dosage']; ?></td>
+                 
+                  
+                  <td>
+                    <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#centralModalDanger" onclick="remove_dosage_modal('Remove','<?php echo $dosage_data['dosage_id'];?>')" >Remove</a></td>
+                </tr>
+                <?php
+              }
+
+       ?>
+    </tbody>
+    <!--Table body-->
+
+</table>
+     </div>
+     <!--/.Panel 1-->
+     <!--Panel 2-->
+     <div class="tab-pane fade" id="panel6" role="tabpanel" aria-labelledby="tab2">
+         <br>
+         <div class="row">
+         	<div class="col-lg-8" style="margin: 10px auto">
          		<!-- Form -->
     <form class="" style="color: #3F51B5;" id="loginform" method="post">
         <div class="row">
              <div class="col-lg-6">
-         <div class="file-field">
-    <div class="btn btn-primary btn-sm float-left">
-      <span>Choose Army Person file</span>
-      <input type="file" name="file" id="armyPersonFile">
-    </div>
-    <div class="file-path-wrapper">
-      <input class="file-path validate" type="text" placeholder="Upload your file">
-    </div>
-  </div>
-        </div>
-             <div class="col-lg-6">
+           <div class="md-form">
          
-         
-          <div class="file-field">
-    <div class="btn btn-primary btn-sm float-left">
-      <span>Choose Relation file</span>
-      <input type="file" name="relationfile" id="relationFile">
-    </div>
-    <div class="file-path-wrapper">
-      <input class="file-path validate" type="text" placeholder="Upload your file">
-    </div>
-  </div>
-  
-        </div>
-        </div>
-      <div class="row">
-        
+         <i class="fa fa-user prefix"></i>
+        <input type="text" class="form-control" name="dosage" id="dosage">
+        <label for="dosage">Dosage</label>
        
-      
-      </div>
-      <!-- Email -->
-      
-
-      <!-- Password -->
-      
- 
+  </div>
+        </div>
+             
+        </div>
+    
      
 <div class="md-form  col-lg-3 offset-md-4">
 	 
-      <input type="submit" name="add-instructor" value="Upload Files" class="btn_login waves-effect">
+      <input type="submit" name="add-instructor" value="Add Dosage" class="btn_login waves-effect">
 </div>
    </form>
          	</div>
          </div>
-		
-           
-</main>
+     </div>
+     <!--/.Panel 2-->
+     
+ </div>	
+
+</div> 
+
 
 <!-- Central Modal Medium Success -->
 <div class="modal fade" id="centralModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -193,7 +223,7 @@ select {
     <div class="modal-content">
         <!--Header-->
         <div class="modal-header">
-            <p class="heading lead">Registered</p>
+            <p class="heading lead">Added</p>
 
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true" class="white-text">&times;</span>
@@ -203,8 +233,8 @@ select {
         <!--Body-->
         <div class="modal-body">
             <div class="text-center">
-             
-                <h3>Files upload successfully</h3>
+                <i class="fa fa-check fa-4x mb-3 animated rotateIn"></i>
+                <h3>Dosage added successfully</h3>
                 
             </div>
         </div>
@@ -212,30 +242,79 @@ select {
         <!--Footer-->
         <div class="modal-footer justify-content-center">
             
-            <a  class="btn btn-outline-success waves-effect" href="ManageArmyPerson.php">OK</a>
+            <a type="button" class="btn btn-outline-success waves-effect" href="ManageDosage.php">OK</a>
         </div>
     </div>
     <!--/.Content-->
 </div>
 </div>
+<!-- Central Modal Medium Success-->
+<!-- Central Modal Medium Danger -->
+  <div class="modal fade" id="centralModalDanger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-danger" role="document">
+      <!--Content-->
+      <div class="modal-content">
+          <!--Header-->
+          <div class="modal-header">
+              <p class="heading lead">Confirmation</p>
+  
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="white-text">&times;</span>
+              </button>
+          </div>
+  
+          <!--Body-->
+          <div class="modal-body">
+              <div class="text-center">
+                <h4 id="heading"></h4>
+                 
+              </div>
+          </div>
+  
+          <!--Footer-->
+          <div class="modal-footer justify-content-center">
+            <form method="post" id="deleteForm" action="../Controller/AdminController.php">
+              <div class="md-form">
+                 <input type="text" name="remove_dosage" id="modal-input-delete" style="display: none;" >
+              </div>
+             
+             <div class="md-form">
+               <button type="submit" name="removeDosage" class="btn btn-danger">Remove <i class="fa fa-times ml-1"></i></button>
+             </div>
+            </form>
+            
+          
+          </div>
+      </div>
+      <!--/.Content-->
+  </div>
+  </div>
+  <!-- Central Modal Medium Danger-->
 
 
 <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
   
-  <!-- Bootstrap tooltips -->
- 
-  <!-- Bootstrap core JavaScript 
-  <script type="text/javascript" src="js/bootstrap.min.js">
- 
-  <script type="text/javascript" src="js/mdb.min.js"></script>-->
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/compiled.min.js"></script>
+ 
   <script type="text/javascript" src="js/jquery.validate.js"></script>
-    <script type="text/javascript">
+  <script type="text/javascript">
+    function remove_dosage_modal(param1 ,param2)
+{
+  document.getElementById('modal-input-delete').value = param2;
+  ;
+  document.getElementById('heading').innerHTML = "Really want to remove ?";
+  ;
+  document.getElementById('modal-tablesLabel_question').innerHTML = param1.replace("_"," ");
+}
+  </script>
+  <script type="text/javascript">
    $(document).ready(function(){
       $( "#loginform" ).validate({
         rules: {
           
-          dname: {
+          dosage: {
             required: true
           },
           year: {
@@ -272,8 +351,8 @@ select {
         },
         messages: {
           
-          dname: {
-            required: "Department name is required"
+          dosage: {
+            required: "Dosage name is required"
           },
           year:{
              required: "Year is required"
@@ -309,24 +388,21 @@ select {
 
      submitHandler: function(form) {
        
-   var file_data1 = $('#armyPersonFile').prop('files')[0];   
-   var file_data2 = $('#relationFile').prop('files')[0];  
-    var form_data = new FormData();                  
-    form_data.append('file', file_data1);
-    form_data.append('relationfile',file_data2);
-    //(form_data);      
-    console.log(form_data);
-    $.ajax({
-        url: '../Controller/AdminController.php', // point to server-side PHP script 
-        dataType: 'text',  // what to expect back from the PHP script, if anything
-        cache: false,
-        contentType: false,
-        processData: false,
-        data: form_data,                         
-        type: 'post',
-        success: function(php_script_response){
-           $('#centralModalSuccess').modal('show');
-        }
+         var dosage= $('#dosage').val();
+  
+  
+   
+ // //("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
+ 
+   var datastring="dosage="+dosage+"&addDosage="+"yes";
+     $.ajax({
+      type:"POST",
+      url:"../Controller/AdminController.php",
+      data:datastring,
+      success:function(result){
+        
+            $('#centralModalSuccess').modal('show');
+      }
      });
 
   },
@@ -353,5 +429,18 @@ select {
        );
     });
   </script>
+   <script type="text/javascript">
+/*       $(".toggle-password").click(function() {
+
+  $(this).toggleClass("fa-eye fa-eye-slash");
+  var input = $($(this).attr("toggle"));
+  if (input.attr("type") == "password") {
+    input.attr("type", "text");
+  } else {
+    input.attr("type", "password");
+  }
+});*/
+   </script>
+   
 </body>
 </html>

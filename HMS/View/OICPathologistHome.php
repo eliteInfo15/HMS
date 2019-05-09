@@ -1,5 +1,6 @@
 <?php session_start();
 require_once '../Controller/PathologistController.php';
+require_once '../Controller/DoctorController.php';
    if (isset($_SESSION["armyNumberSession"]) && isset($_SESSION["roleSession"])) {
   $p=new PathologistController();
            $prole=$p->getPathologistRole($_SESSION["armyNumberSession"]);
@@ -24,7 +25,7 @@ else{
 <head>
 	<meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="refresh" content="4">
+  <meta http-equiv="refresh" content="10">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Hospital Management System</title>
   <!-- Font Awesome -->
@@ -123,7 +124,9 @@ select {
                         		</div>
                         	</form>
                         	</li>
-                        
+                         <li class="nav-item">
+                             <a href="ChangePathologistPassword.php?pathologistId=<?php echo $_SESSION["armyNumberSession"];?>" class="btn indigo btn-rounded btn-md my-2 my-sm-0 ml-3" style="color: white"><i class="fa fa-pencil" style="font-size: 15px"></i> Change Password</a> 
+                                </li>
                         
                     </ul>
                 </div>
@@ -132,7 +135,7 @@ select {
     </header>
    
 <?php //require_once 'NavigationBar.php'; 
- 
+  
  /*$doctorArmyNo=$_SESSION["armyNumberSession"];
  $doctor=new DoctorController();
  $deptData=$doctor->getDepartmentByDoctor($doctorArmyNo);
@@ -145,7 +148,18 @@ select {
 ?>
 
 <main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px">
-    <div class="row" style="background: white">
+    <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+     <li class="nav-item">
+         <a class="nav-link active" id="tab1" data-toggle="tab" href="#panel5" role="tab"><i class="fa fa-user-md"></i>Review Test</a>
+     </li> 
+     <li class="nav-item">
+         <a class="nav-link" id="tab2" data-toggle="tab" href="#panel6" role="tab"><i class="fa fa-eye"></i> Test Result</a>
+     </li>
+    
+ </ul>
+    <div class="tab-content">
+        <div class="row tab-pane fade in show active" style="background: white" id="panel5" role="tabpanel" aria-labelledby="tab1">
+         <div class="row" style="background: white">
         <div class="container text-center" style="margin-top: 30px;">
             <h2>Review Test</h2>
         </div>
@@ -231,6 +245,73 @@ select {
     
          	</div>
          </div>
+        </div>
+               <div class="tab-pane fade" id="panel6" role="tabpanel" aria-labelledby="tab2">
+            <div class="container-fluid" style="background: white">
+                       	<div class="col-lg-8" style="margin: 0px auto">
+         	
+                    <table class="table" style="width:1000px">
+
+    <!--Table head-->
+    <thead style="background: #0D47A1" align="center">
+        <tr class="text-white">
+            
+            <th>Army No.</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Relation</th>
+            <th>Rank</th>
+         
+            <th>Department</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <!--Table head-->
+
+    <!--Table body-->
+    <tbody>
+      <?php
+      
+      $doctor=new DoctorController();
+         $row=$doctor->getAllTestedPatients();
+      $row= array_unique($row->fetchAll(PDO::FETCH_ASSOC), SORT_REGULAR);
+      //  $row= array_unique($row, SORT_REGULAR);
+              foreach ($row as $patient_data) {
+                ?>
+                <tr class="text-center">
+                    
+                    
+                  <td><?php echo $patient_data['army_no']; ?></td>
+                   <td><?php echo $patient_data['relation_fname']; ?></td>
+                  <td><?php echo $patient_data['relation_lname']; ?></td>
+                  <td><?php echo $patient_data['relation']; ?></td>
+                   <td><?php echo $patient_data['rank']; ?></td>
+         
+                  
+                    <td><?php echo $patient_data['dname']; ?></td>
+                    
+                     <td>
+                      <a href="ViewPatientReportOic.php?personId=<?php echo $patient_data['person_id'];?>&doctorId=<?php echo $patient_data["dno"];?>&doctorName=<?php echo $patient_data["doctor_name"]?>" class="btn btn-danger btn-sm"  >View History</a>
+                  </td>
+                    
+                   
+                  
+                 
+                </tr>
+                <?php
+              }
+
+       ?>
+    </tbody>
+    <!--Table body-->
+
+</table>
+    
+         	</div>
+            </div>
+        </div> 
+    </div>
+  
 		
        <div class="modal fade" id="centralModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-notify modal-success" role="document">

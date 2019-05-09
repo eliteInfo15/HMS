@@ -168,7 +168,7 @@ select {
               foreach ($row as $doctor_data) {
                 ?>
                 <tr class="text-center">
-                  <td><?php echo $doctor_data['army_no']; ?></td>
+                  <td><?php echo $doctor_data['doctor_army_no']; ?></td>
                    <td><?php echo $doctor_data['dfname']; ?></td>
                   <td><?php echo $doctor_data['dlname']; ?></td>
                   <td><?php echo $doctor_data['mobile_no']; ?></td>
@@ -178,7 +178,7 @@ select {
                    <td><?php echo $doctor_data['joining_date']; ?></td>
                    <td><?php echo $doctor_data['date_of_birth']; ?></td>
                   <td>
-                    <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#centralModalDanger" onclick="remove_doctor_modal('Remove','<?php echo $doctor_data['army_no'];?>')" >Remove</a></td>
+                    <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#centralModalDanger" onclick="remove_doctor_modal('Remove','<?php echo $doctor_data['doctor_army_no'];?>')" >Remove</a></td>
                 </tr>
                 <?php
               }
@@ -207,6 +207,27 @@ select {
        
   </div>
         </div>
+           
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+           <div class="md-form">
+         
+         <i class="fa fa-user prefix"></i>
+        <input type="text" class="form-control" name="previousDoctor" id="previousDoctor">
+        <label for="previousDoctor">Previous Doctor Name</label>
+       
+           </div>
+        </div>
+             <div class="col-lg-6">
+           <div class="md-form">
+         
+         <i class="fa fa-user prefix"></i>
+        <input type="text" class="form-control" name="previousDoctorRank" id="previousDoctorRank">
+        <label for="previousDoctorRank">Previous Doctor Rank</label>
+       
+           </div>
+        </div>
         </div>
       <div class="row">
         
@@ -215,7 +236,7 @@ select {
          
          <i class="fa fa-key prefix"></i>
         <input type="password" id="password-field" class="form-control" name="password" data-toggle="password">
-        <label for="password-field">Password</label>
+        <label for="password-field" style="margin-top: -25px;">Password</label>
         <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password side-align"></span>
   </div>
         </div>
@@ -442,6 +463,35 @@ select {
   <script type="text/javascript" src="js/compiled.min.js"></script>
  
   <script type="text/javascript" src="js/jquery.validate.js"></script>
+     <script type="text/javascript">
+       $(".toggle-password").click(function() {
+
+  $(this).toggleClass("fa-eye fa-eye-slash");
+  var input = $($(this).attr("toggle"));
+  if (input.attr("type") == "password") {
+    input.attr("type", "text");
+  } else {
+    input.attr("type", "password");
+  }
+});
+   </script>
+  <script>
+      function randomPassword(length) {
+    var chars = "abcdefghijklmnpqrstuvwxyz@%KLMNOP1234567890";
+    var pass = "";
+    for (var x = 0; x < length; x++) {
+        var i = Math.floor(Math.random() * chars.length);
+        pass += chars.charAt(i);
+    }
+    return pass;
+}
+  </script>
+  <script>
+  $(document).ready(function(){
+      var password=randomPassword(8);
+      $("#password-field").val(password);
+  });
+  </script>
   <script type="text/javascript">
     function remove_doctor_modal(param1 ,param2)
 {
@@ -466,6 +516,12 @@ select {
         rules: {
           
           army_no: {
+            required: true
+          },
+          previousDoctor: {
+            required: true
+          },
+          previousDoctorRank: {
             required: true
           },
           password: {
@@ -506,6 +562,12 @@ select {
           
           army_no: {
             required: "Army number is required"
+          },
+          previousDoctor: {
+            required: "This value is required"
+          },
+          previousDoctorRank: {
+            required: "This value is required"
           },
           skill:{
              required: "Skill is required"
@@ -552,15 +614,17 @@ select {
    var mobile=$('#mobile').val();
    var Rank=$('#Rank').val();
    var dob=$('#dob').val();
+   var previousDoctor=$('#previousDoctor').val();
+   var previousDoctorRank=$('#previousDoctorRank').val();
    var role="doctor";
   var selected_departments=new Array();
   $(".subjects:checked").each(function() {
            selected_departments.push($(this).val());
         });
    var gender=$('input[name=gender]:checked', '#loginform').val(); 
- // alert("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
+ // //("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
  
-   var datastring="army_no="+army_no+"&role="+role+"&password="+password+"&firstName="+fname+"&lastName="+lname+"&email="+email+"&mobile="+mobile+"&rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&did="+selected_departments+"&doj="+doj;
+   var datastring="army_no="+army_no+"&previousDoctor="+previousDoctor+"&previousDoctorRank="+previousDoctorRank+"&role="+role+"&password="+password+"&firstName="+fname+"&lastName="+lname+"&email="+email+"&mobile="+mobile+"&rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&did="+selected_departments+"&doj="+doj;
 
      $.ajax({
       type:"POST",

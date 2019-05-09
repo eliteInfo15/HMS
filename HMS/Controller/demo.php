@@ -1,183 +1,30 @@
-<br />
-<font size='1'>
-    <table class='xdebug-error xe-warning' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
-        <tr>
-            <th align='left' bgcolor='#f57900' colspan="5">
-                <span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Warning: move_uploaded_file(uploads/test.xlsx): failed to open stream: No such file or directory in C:\wamp64\www\HMS\Model\ArmyServingPersonModel.php on line
-                <i>102</i>
-            </th>
-        </tr>
-        <tr>
-            <th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th>
-        </tr>
-        <tr>
-            <th align='center' bgcolor='#eeeeec'>#</th>
-            <th align='left' bgcolor='#eeeeec'>Time</th>
-            <th align='left' bgcolor='#eeeeec'>Memory</th>
-            <th align='left' bgcolor='#eeeeec'>Function</th>
-            <th align='left' bgcolor='#eeeeec'>Location</th>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>1</td>
-            <td bgcolor='#eeeeec' align='center'>0.0007</td>
-            <td bgcolor='#eeeeec' align='right'>274640</td>
-            <td bgcolor='#eeeeec'>{main}(  )</td>
-            <td title='C:\wamp64\www\HMS\Controller\AdminController.php' bgcolor='#eeeeec'>...\AdminController.php
-                <b>:</b>0
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>2</td>
-            <td bgcolor='#eeeeec' align='center'>0.0440</td>
-            <td bgcolor='#eeeeec' align='right'>1043488</td>
-            <td bgcolor='#eeeeec'>AdminController->addArmyPerson(  )</td>
-            <td title='C:\wamp64\www\HMS\Controller\AdminController.php' bgcolor='#eeeeec'>...\AdminController.php
-                <b>:</b>84
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>3</td>
-            <td bgcolor='#eeeeec' align='center'>0.0440</td>
-            <td bgcolor='#eeeeec' align='right'>1044896</td>
-            <td bgcolor='#eeeeec'>ArmyServingPersonModel->addArmyPerson(  )</td>
-            <td title='C:\wamp64\www\HMS\Controller\AdminController.php' bgcolor='#eeeeec'>...\AdminController.php
-                <b>:</b>66
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>4</td>
-            <td bgcolor='#eeeeec' align='center'>0.0441</td>
-            <td bgcolor='#eeeeec' align='right'>1045952</td>
-            <td bgcolor='#eeeeec'>
-                <a href='http://www.php.net/function.move-uploaded-file' target='_new'>move_uploaded_file</a>
-(  )
-            </td>
-            <td title='C:\wamp64\www\HMS\Model\ArmyServingPersonModel.php' bgcolor='#eeeeec'>...\ArmyServingPersonModel.php
-                <b>:</b>102
-            </td>
-        </tr>
-    </table>
-</font>
-<br />
-<font size='1'>
-    <table class='xdebug-error xe-warning' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
-        <tr>
-            <th align='left' bgcolor='#f57900' colspan="5">
-                <span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Warning: move_uploaded_file(): Unable to move 'C:\wamp64\tmp\php931C.tmp' to 'uploads/test.xlsx' in C:\wamp64\www\HMS\Model\ArmyServingPersonModel.php on line
-                <i>102</i>
-            </th>
-        </tr>
-        <tr>
-            <th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th>
-        </tr>
-        <tr>
-            <th align='center' bgcolor='#eeeeec'>#</th>
-            <th align='left' bgcolor='#eeeeec'>Time</th>
-            <th align='left' bgcolor='#eeeeec'>Memory</th>
-            <th align='left' bgcolor='#eeeeec'>Function</th>
-            <th align='left' bgcolor='#eeeeec'>Location</th>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>1</td>
-            <td bgcolor='#eeeeec' align='center'>0.0007</td>
-            <td bgcolor='#eeeeec' align='right'>274640</td>
-            <td bgcolor='#eeeeec'>{main}(  )</td>
-            <td title='C:\wamp64\www\HMS\Controller\AdminController.php' bgcolor='#eeeeec'>...\AdminController.php
-                <b>:</b>0
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>2</td>
-            <td bgcolor='#eeeeec' align='center'>0.0440</td>
-            <td bgcolor='#eeeeec' align='right'>1043488</td>
-            <td bgcolor='#eeeeec'>AdminController->addArmyPerson(  )</td>
-            <td title='C:\wamp64\www\HMS\Controller\AdminController.php' bgcolor='#eeeeec'>...\AdminController.php
-                <b>:</b>84
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>3</td>
-            <td bgcolor='#eeeeec' align='center'>0.0440</td>
-            <td bgcolor='#eeeeec' align='right'>1044896</td>
-            <td bgcolor='#eeeeec'>ArmyServingPersonModel->addArmyPerson(  )</td>
-            <td title='C:\wamp64\www\HMS\Controller\AdminController.php' bgcolor='#eeeeec'>...\AdminController.php
-                <b>:</b>66
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>4</td>
-            <td bgcolor='#eeeeec' align='center'>0.0441</td>
-            <td bgcolor='#eeeeec' align='right'>1045952</td>
-            <td bgcolor='#eeeeec'>
-                <a href='http://www.php.net/function.move-uploaded-file' target='_new'>move_uploaded_file</a>
-(  )
-            </td>
-            <td title='C:\wamp64\www\HMS\Model\ArmyServingPersonModel.php' bgcolor='#eeeeec'>...\ArmyServingPersonModel.php
-                <b>:</b>102
-            </td>
-        </tr>
-    </table>
-</font>
-<br />
-<font size='1'>
-    <table class='xdebug-error xe-uncaught-exception' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
-        <tr>
-            <th align='left' bgcolor='#f57900' colspan="5">
-                <span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Fatal error: Uncaught exception 'Exception' with message 'SpreadsheetReader: File (uploads/test.xlsx) not readable' in C:\wamp64\www\HMS\Model\ExcelReader\SpreadsheetReader.php on line
-                <i>44</i>
-            </th>
-        </tr>
-        <tr>
-            <th align='left' bgcolor='#f57900' colspan="5">
-                <span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Exception: SpreadsheetReader: File (uploads/test.xlsx) not readable in C:\wamp64\www\HMS\Model\ExcelReader\SpreadsheetReader.php on line
-                <i>44</i>
-            </th>
-        </tr>
-        <tr>
-            <th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th>
-        </tr>
-        <tr>
-            <th align='center' bgcolor='#eeeeec'>#</th>
-            <th align='left' bgcolor='#eeeeec'>Time</th>
-            <th align='left' bgcolor='#eeeeec'>Memory</th>
-            <th align='left' bgcolor='#eeeeec'>Function</th>
-            <th align='left' bgcolor='#eeeeec'>Location</th>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>1</td>
-            <td bgcolor='#eeeeec' align='center'>0.0007</td>
-            <td bgcolor='#eeeeec' align='right'>274640</td>
-            <td bgcolor='#eeeeec'>{main}(  )</td>
-            <td title='C:\wamp64\www\HMS\Controller\AdminController.php' bgcolor='#eeeeec'>...\AdminController.php
-                <b>:</b>0
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>2</td>
-            <td bgcolor='#eeeeec' align='center'>0.0440</td>
-            <td bgcolor='#eeeeec' align='right'>1043488</td>
-            <td bgcolor='#eeeeec'>AdminController->addArmyPerson(  )</td>
-            <td title='C:\wamp64\www\HMS\Controller\AdminController.php' bgcolor='#eeeeec'>...\AdminController.php
-                <b>:</b>84
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>3</td>
-            <td bgcolor='#eeeeec' align='center'>0.0440</td>
-            <td bgcolor='#eeeeec' align='right'>1044896</td>
-            <td bgcolor='#eeeeec'>ArmyServingPersonModel->addArmyPerson(  )</td>
-            <td title='C:\wamp64\www\HMS\Controller\AdminController.php' bgcolor='#eeeeec'>...\AdminController.php
-                <b>:</b>66
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor='#eeeeec' align='center'>4</td>
-            <td bgcolor='#eeeeec' align='center'>0.0511</td>
-            <td bgcolor='#eeeeec' align='right'>1048736</td>
-            <td bgcolor='#eeeeec'>SpreadsheetReader->__construct(  )</td>
-            <td title='C:\wamp64\www\HMS\Model\ArmyServingPersonModel.php' bgcolor='#eeeeec'>...\ArmyServingPersonModel.php
-                <b>:</b>104
-            </td>
-        </tr>
-    </table>
-</font>
+<?php
+//
+//
+//
+//
+//select opd.patient_id,army_person_relation.relation_fname,army_person_relation.relation_lname,army_person_relation.relation,army_person_relation.army_no,comments,category,opd.opd_date,doctor.doctor_army_no,doctor.dfname,doctor.dlname,doctor.drank, department.dname,patient_test_result.test_id,tests.test_name,patient_test_result.attribute_id,attributes.attribute_name,patient_test_result.value,patient_test_result.date from patient,opd,doctor,department,doctor_speciality,army_person_relation,army_serving_person,patient_medicine_prescription,patient_test_result,tests,attributes,test_attributes WHERE opd.doctor_army_no=doctor.doctor_army_no and doctor.doctor_army_no=doctor_speciality.army_no and department.did=doctor_speciality.did and opd.patient_id=patient.patient_id and patient.person_id=army_person_relation.person_id and army_person_relation.person_id='35' and opd.doctor_army_no='9191' and army_person_relation.army_no=army_serving_person.army_no and patient_medicine_prescription.patient_id=opd.patient_id and tests.test_id=test_attributes.test_id and attributes.attribute_id=test_attributes.attribute_id and patient_test_result.patient_id=patient.patient_id and opd.test_id=patient_test_result.test_id and tests.test_id=patient_test_result.test_id and patient_test_result.attribute_id=test_attributes.attribute_id;
+//select opd.patient_id,army_person_relation.relation_fname,army_person_relation.relation_lname,army_person_relation.relation,army_person_relation.army_no,comments,category,opd.opd_date,doctor.doctor_army_no,doctor.dfname,doctor.dlname,doctor.drank, department.dname,patient_test_result.test_id,tests.test_name,patient_test_result.attribute_id,attributes.attribute_name,patient_test_result.value,patient_test_result.date from patient,opd,doctor,department,doctor_speciality,army_person_relation,army_serving_person,patient_medicine_prescription,patient_test_result,tests,attributes,test_attributes WHERE opd.doctor_army_no=doctor.doctor_army_no and doctor.doctor_army_no=doctor_speciality.army_no and department.did=doctor_speciality.did and opd.patient_id=patient.patient_id and patient.person_id=army_person_relation.person_id and army_person_relation.person_id='35' and opd.doctor_army_no='9191' and army_person_relation.army_no=army_serving_person.army_no and patient_medicine_prescription.patient_id=opd.patient_id and tests.test_id=test_attributes.test_id and attributes.attribute_id=test_attributes.attribute_id and patient_test_result.patient_id=patient.patient_id and opd.test_id=patient_test_result.test_id and tests.test_id=patient_test_result.test_id and patient_test_result.attribute_id=test_attributes.attribute_id;
+
+$qry="select opd.patient_id,army_person_relation.relation_fname,army_person_relation.relation_lname,"
+        . "army_person_relation.relation,army_person_relation.blood_group,army_person_relation.army_no as "
+        . "person_army_no,comments,category,opd.opd_date,patient_medicine_prescription.medicine_id,"
+        . "medicines.medicine_name,patient_medicine_prescription.dosage_id,medicine_dosage.dosage,"
+        . "patient_medicine_prescription.instruction_id,dosage_instruction.instruction,patient_medicine_prescription.days,"
+        . "doctor.doctor_army_no,doctor.dfname,doctor.dlname,doctor.drank, department.dname,patient_test_result.test_id,"
+        . "tests.test_name,patient_test_result.attribute_id,attributes.attribute_name,"
+        . "patient_test_result.value,patient_test_result.date as test_result_date from patient,opd,doctor,"
+        . "department,doctor_speciality,army_person_relation,army_serving_person,medicines,medicine_dosage,"
+        . "dosage_instruction,patient_medicine_prescription,patient_test_result,tests,attributes,test_attributes "
+        . "WHERE opd.doctor_army_no=doctor.doctor_army_no and doctor.doctor_army_no=doctor_speciality.army_no and "
+        . "department.did=doctor_speciality.did and opd.patient_id=patient.patient_id and "
+        . "patient.person_id=army_person_relation.person_id and army_person_relation.person_id='$personId' and "
+        . "opd.doctor_army_no='$doctorId' and army_person_relation.army_no=army_serving_person.army_no and "
+        . "patient_medicine_prescription.patient_id=opd.patient_id and tests.test_id=test_attributes.test_id and "
+        . "attributes.attribute_id=test_attributes.attribute_id and patient_test_result.patient_id=patient.patient_id and "
+        . "opd.test_id=patient_test_result.test_id and tests.test_id=patient_test_result.test_id and "
+        . "patient_test_result.attribute_id=test_attributes.attribute_id and patient_medicine_prescription.patient_id=opd.patient_id"
+        . " and patient_medicine_prescription.medicine_id=medicines.medicine_id and "
+        . "patient_medicine_prescription.dosage_id=medicine_dosage.dosage_id and "
+        . "patient_medicine_prescription.instruction_id=dosage_instruction.instruction_id";
+?>

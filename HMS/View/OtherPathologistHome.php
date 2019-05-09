@@ -146,7 +146,9 @@ select {
                         		</div>
                         	</form>
                         	</li>
-                        
+                         <li class="nav-item">
+                             <a href="ChangePathologistPassword.php?pathologistId=<?php echo $_SESSION["armyNumberSession"];?>" class="btn indigo btn-rounded btn-md my-2 my-sm-0 ml-3" style="color: white"><i class="fa fa-pencil" style="font-size: 15px"></i> Change Password</a> 
+                                </li>
                         
                     </ul>
                 </div>
@@ -293,9 +295,9 @@ $('[data-toggle="tooltip"]').tooltip();
     url: '../Controller/PathologistController.php', 
     data:datastring,
     success: function(data) {
-        console.log("data started");
+        console.log(data);
        var obj= JSON.parse(data);
-      // console.log(obj);
+     console.log(obj);
        if(data){
                 var len = obj.length;
                 var txt = "";
@@ -329,7 +331,7 @@ $('[data-toggle="tooltip"]').tooltip();
        
      }
            }
-    txt += "<tr class='text-center'><td>"+obj[i].army_no+'   '+n+"</td><td>"+obj[i].rank+"</td><td>"+obj[i].fname+' '+obj[i].lname+"</td><td>"+obj[i].relation_fname+' '+obj[i].relation_lname+"</td><td>"+obj[i].relation+"</td><td>"+age+"</td><td>"+obj[i].blood_group+"</td><td>"+obj[i].drank+' '+obj[i].dfname+' '+obj[i].lname+"</td><td>"+obj[i].test_name+"</td>"+optionTd+"</tr>";
+    txt += "<tr class='text-center'><td>"+obj[i].army_no+"</td><td>"+obj[i].rank+"</td><td>"+obj[i].fname+' '+obj[i].lname+"</td><td>"+obj[i].relation_fname+' '+obj[i].relation_lname+"</td><td>"+obj[i].relation+"</td><td>"+age+"</td><td>"+obj[i].blood_group+"</td><td>"+obj[i].drank+' '+obj[i].dfname+' '+obj[i].lname+"</td><td>"+obj[i].test_name+"</td>"+optionTd+"</tr>";
                       
                     }
                      console.log("data end"); 

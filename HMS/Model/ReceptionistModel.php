@@ -120,7 +120,26 @@ class ReceptionistModel{
             }
             return $result;
         }
-        
+           public function changePassword($receptionistId,$currentPassword,$newPassword) {
+               $matchCurrentPassword="select password from login where role='receptionist' and army_no='$receptionistId'";
+              $result= Database::read($matchCurrentPassword);
+               if ($data=$result->fetch(PDO::FETCH_ASSOC)) 
+               {
+              if (password_verify($currentPassword,$data['password']))
+              {
+                  $passwordHash=password_hash($newPassword,PASSWORD_BCRYPT);
+                  $changePassword="update login set password='$passwordHash' where army_no='$receptionistId' ";
+                  Database::update($changePassword);
+                  return 1;
+              }
+              else{
+                  return 0;
+              }
+              }
+           else{
+               return 0;
+           }
+            }
         
 }
 /* 

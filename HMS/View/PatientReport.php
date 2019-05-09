@@ -1,8 +1,10 @@
 <?php session_start();
-
+ require_once '../Controller/AdminController.php';
+  require_once '../Controller/ReceptionistController.php';
+  require_once '../Model/Database.php';
    if (isset($_SESSION["armyNumberSession"]) && isset($_SESSION["roleSession"])) {
   
-       if ($_SESSION["roleSession"]!="receptionist") {
+       if ($_SESSION["roleSession"]!="admin") {
           header('location:Login.php');
        }
 
@@ -19,6 +21,7 @@ else{
 <head>
 	<meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <meta http-equiv="refresh" content="300">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Hospital Management System</title>
   <!-- Font Awesome -->
@@ -93,7 +96,7 @@ select {
 
                 <!-- Navbar -->
         <nav class="mb-1 navbar navbar-expand-lg z-depth-2 navbar-fixed-top">
-            <a class="navbar-brand" href="ReceptionHome.php" style="color: black;"><img src="images/icon.png" style="width: 50px;height: 50px">  Hospital Management System</a>
+            <a class="navbar-brand" href="AdminHome.php" style="color: black;"><img src="images/icon.png" style="width: 50px;height: 50px">  Hospital Management System</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fa fa-bars" style="color: black;"></i>
                         </button>
@@ -117,9 +120,7 @@ select {
                         		</div>
                         	</form>
                         	</li>
-                                 <li class="nav-item">
-                                     <a href="ChangeReceptionistPassword.php?receptionistId=<?php echo $_SESSION["armyNumberSession"];?>" class="btn indigo btn-rounded btn-md my-2 my-sm-0 ml-3" style="color: white"><i class="fa fa-pencil" style="font-size: 15px"></i> Change Password</a> 
-                                </li>
+                               
                         
                         
                     </ul>
@@ -129,176 +130,59 @@ select {
     </header>
    
 <?php //require_once 'NavigationBar.php'; 
- require_once '../Controller/ReceptionistController.php';
+ require_once '../Controller/DoctorController.php';
+ $doctorArmyNo=$_SESSION["armyNumberSession"];
+ $doctor=new DoctorController();
+ $deptData=$doctor->getDepartmentByDoctor($doctorArmyNo);
+ 
+ $deptIdArray=array();
+ while($data=$deptData->fetch(PDO::FETCH_ASSOC)) {
+     $did=(int)$data["did"];
+     array_push($deptIdArray, $did);
+}
 ?>
 
-<main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px;margin-top: 20px;background: white">
-    <!-- Nav tabs -->
- <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+<main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px">
+     <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
      <li class="nav-item">
-         <a class="nav-link active" id="tab1" data-toggle="tab" href="#panel5" role="tab"><i class="fa fa-eye"></i> View Patients</a>
+         <a class="nav-link active" id="tab1" data-toggle="tab" href="#panel5" role="tab"><i class="fa fa-pie-chart"></i> Daily Analysis</a>
      </li> 
      <li class="nav-item">
-         <a class="nav-link" id="tab2" data-toggle="tab" href="#panel6" role="tab"><i class="fa fa-pencil"></i> Add Patient</a>
+         <a class="nav-link" id="tab2" data-toggle="tab" href="#panel6" role="tab"><i class="fa fa-eye"></i> Patient Report</a>
      </li>
     
  </ul>
-     <div class="tab-content">
-     <!--Panel 1-->
-     <div class="tab-pane fade in show active" id="panel5" role="tabpanel" aria-labelledby="tab1">
-         <br>
-           <table class="table">
-
-    <!--Table head-->
-    <thead style="background: #0D47A1" align="center">
-        <tr class="text-white">
-            <th>Patient Token</th>
-            <th>Army no.</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Relation</th>
-            <th>Department</th>
-            <th>Options</th>
-        </tr>
-    </thead>
-    <!--Table head-->
-
-    <!--Table body-->
-    <tbody>
-      <?php $reception=new ReceptionistController();
-         $row=$reception->getAllPatients();
-       //  var_dump($row);
-              foreach ($row as $patient_data) {
-                ?>
-                <tr class="text-center">
-                  <td><?php echo $patient_data['token']; ?></td>
-                   <td><?php echo $patient_data['army_no']; ?></td>
-                  <td><?php echo $patient_data['relation_fname']; ?></td>
-                  <td><?php echo $patient_data['relation_lname']; ?></td>
-                  <td><?php echo $patient_data['relation']; ?></td>
-                  <td><?php echo $patient_data['dname']; ?></td>
-                  <td>
-                      <a href="PrintToken.php?token=<?php echo $patient_data['token'];?>&army_no=<?php echo $patient_data['army_no'];?>&department=<?php echo $patient_data['dname'];?>&date=<?php echo $patient_data['date'];?>&relation=<?php echo $patient_data['relation'];?>&fname=<?php echo $patient_data['relation_fname'];?>&lname=<?php echo $patient_data['relation_lname'];?>&doctor=<?php echo $patient_data['drank'].' '.$patient_data['dfname'].' '.$patient_data['dlname']; ?>" class="btn btn-success btn-sm"  target="new">Print Receipt</a></td>
-                </tr>
-                <?php
-              }
-
-       ?>
-    </tbody>
-    <!--Table body-->
-
-</table>
-     </div>
-     <!--/.Panel 1-->
-     <!--Panel 2-->
-     <div class="tab-pane fade" id="panel6" role="tabpanel" aria-labelledby="tab2">
-         <br>
-         <div class="row">
-               <div class="container text-center" style="margin-top: 30px;">
-            <h2>Add Patient</h2>
-        </div>
-         	<div class="col-lg-8" style="margin: 10px auto">
-         		<!-- Form -->
-       <form class="" style="color: #3F51B5;" id="loginform" method="post">
-        <input type="text" id="receptionistArmyNo" name="receptionistArmyNo" style="display: none" value="<?php  echo $_SESSION["armyNumberSession"] ?>">
-        <div class="row">
-             <div class="col-lg-6">
-           <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-        <input type="text" class="form-control" name="army_no" id="army_no">
-        <label for="army_no">Army Number</label>
-       
-  </div>
-        </div>
-            <div class="col-lg-6">
-                 <div class="md-form">
-         
-                     <input type="button" class="btn_login" value="get dependents" id="getdependents">
+    <div class="tab-content">
+    <div class="row tab-pane fade in show active" style="background: white" id="panel5" role="tabpanel" aria-labelledby="tab1">
       
-       
-  </div>
+        <div class="container-fluid">
+           <?php 
+            $date= date("Y/m/d");
+            $obj=date_create($date);  
+            $currentDate=date_format($obj, "l, d F Y");
+            ?>
+            <div class="container-fluid text-center">
+               <div class="chip chip-md" style="background: #e4e4e4;color: #4f4f4f;margin-top: 20px;">
+                         <span style="font-size: 14px">Today <?php echo $currentDate; ?></span>
+             </div>  
             </div>
-        </div>
-        <div class="row gender-container" id="relations">
-            
-        </div>
-      <div class="row">
-        
-        <div class="col-lg-6">
-          <div class="md-form">
+             
+            <div class="container text-center" style="background: white;padding: 50px">
+                <?php $admin=new AdminController();
+                    $res= $admin->getAllPatientsAnalysis();
+                   $total=$res[0][0]["countTotal"];
+                   $consulted=$res[1][0]["countConsulted"];
+                ?>
+                <span class="badge badge-success" style="font-size: 20px">Total number of patients registered today till now <?php echo $total; ?></span><br><br>
+            <span class="badge badge-warning" style="font-size: 20px">Total number of patients consulted today till now <?php echo $consulted; ?></span>
+           </div>
+            <div class="container text-center">
+                <form id="showAnalysis" method="post">
+                    <div class="row">
+                        <div class="col-lg-6" style="text-align: right">
+                        <div class="md-form ">
          
-         <i class="fa fa-user prefix"></i>
-         <input type="text" id="unit-field" class="form-control" name="unit" readonly="">
-         <label for="unit-field" style="margin-top: -24px;">Unit</label>
-        
-  </div>
-        </div>
-       <div class="col-lg-6">
-           <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="Rank" id="Rank" readonly="">
-        <label for="Rank" style="margin-top: -24px;">Rank</label>
-       
-  </div>
-        </div>
-      </div>
-      <!-- Email -->
-      
-
-      <!-- Password -->
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="fname" id="fname" readonly="">
-        <label for="fname" style="margin-top: -24px;">First Name</label>
-       
-  </div>
-
-        </div>
-        <div class="col-lg-6">
-           <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="lname" id="lname" readonly="">
-        <label for="lname" style="margin-top: -24px">Last Name</label>
-       
-  </div>
-        </div>
-      </div>
-  
-  
-  
-  <div class="row">
-    
-    <div class="col-lg-6">
-      <div class="md-form">
-         
-         <i class="fa fa-calendar prefix"></i>
-         <input type="date" class="form-control" name="dob" id="dob" value="" readonly="">
-        <label for="dob" style="margin-top: -24px">Date of birth</label>
-       
-  </div>
-    </div>
-       <div class="col-lg-6">
-           <div class="md-form">
-         
-         <i class="fa fa-user prefix"></i>
-         <input type="text" class="form-control" name="age" id="age" readonly="">
-        <label for="age" style="margin-top: -24px">Age</label>
-       
-  </div>
-        </div>
-  </div>
-  
-      <div class="row">
-          <div class="col-lg-6">
-                    <div class="md-form">
-         
-         <i class="fa fa-book prefix" style="position: relative;padding-right: 10px"></i>
+         <i class="fa fa-book prefix" style="position: relative;padding-right: 10px;color: #1E88E5;"></i>
         <select id="selectbox2" data-selected="" style="display: inline !important;padding-right: 24px;padding-left: 20px;" name="selectbox2">
   
   <option value="" selected disabled>Department</option>
@@ -314,35 +198,147 @@ select {
    ?>
   
 </select>
-   <label for="selectbox2" style="top: -20px;color: #1E88E5;font-size: 0.8rem;">Select Department</label>
+   <label for="selectbox2" style="top: -20px;color: #1E88E5;font-size: 0.8rem;left: 350px">Select Department</label>
       </div>
-          </div>
-          <div class="col-lg-6">
-              <div class="md-form">
-         
-         <i class="fa fa-user-md prefix" style="position: relative;padding-right: 10px"></i>
-        <select id="doctor_select_box" data-selected="" style="display: inline !important;padding-right: 24px;padding-left: 20px;" name="doctor_select_box" >
- <option value="" selected disabled>Doctor</option>
-  
-</select>
- <label for="doctor_select_box" style="top: -20px;color: #1E88E5;font-size: 0.8rem;">Select Doctor</label>
-  </div>
-          </div>
-      </div>
-     
-<div class="md-form  col-lg-3 offset-md-4">
-	 
-      <input type="submit" name="add-instructor" value="Add Patient" class="btn_login waves-effect">
-</div>
-   </form>
+                    </div>
+                        <div class="col-lg-6" style="text-align: left">
+                         <div class="md-form">
+                             <input type="submit" class="btn btn_login" value="View analysis" name="analyse">
+                    </div>
+                    </div>             
+                    </div>
+            </form>
+            </div>
+            <div class="container text-center" id="visualization" style="width: 100%;height: 400px;">
+                <?php 
+                   if (isset($_POST["analyse"])){
+                     
+                      $did= $_POST["selectbox2"];
+                       $get="select count(*) as num, consulted from patient,department where patient.did=department.did and patient.did='$did' and date=date(now()) group by consulted";
+                      $getdname="select dname from department where did='$did'";
+                      $dn=Database::read($getdname);
+                      $dname=$dn->fetch(PDO::FETCH_ASSOC);
+                    $name=$dname["dname"];
+                       $rs= Database::read($get);
+                      $analysisData=$rs->fetchAll(PDO::FETCH_ASSOC);
+                    //  var_dump($analysisData);
+                      if ($analysisData){
+                       
+                        //var_dump() ;
+                        for ($index = 0; $index < count($analysisData); $index++)
+                        {
+                            if($analysisData[$index]["consulted"]=='1') {
+                                $analysisData[$index]["consulted"]='Consulted';
+                            }
+                            else{
+                                $analysisData[$index]["consulted"]='Not consulted';
+                            }
+                        }
+                     
+                          ?>
+                      <!-- load api -->
+        <script type="text/javascript" src="js/jsapi.js"></script>
+        
+        <script type="text/javascript">
+            //load package
+            google.load('visualization', '1', {packages: ['corechart']});
+        </script>
+ 
+        <script type="text/javascript">
+            function drawVisualization() {
+              
+                // Create and populate the data table.
+                var data = google.visualization.arrayToDataTable([
+                    ['Consulted', 'Number of patient Consulted'],
+                    <?php
+              foreach($analysisData as $row){
+                  //
+                        extract($row);
+                        echo "['{$consulted}', {$num}],";
+                    }
+                    ?>
+                ]);
+ 
+                // Create and draw the visualization.
+                new google.visualization.PieChart(document.getElementById('visualization')).
+                draw(data, {title:"Pie chart indicating number of patients consulted for "+"<?php echo $name; ?>"});
+            }
+ 
+            google.setOnLoadCallback(drawVisualization);
+        </script>
+                     <?php 
+                      }
+                   }
+                ?>
+            </div>
+        </div>
+   </div>
+        <div class="tab-pane fade" id="panel6" role="tabpanel" aria-labelledby="tab2">
+            <div class="container-fluid" style="background: white">
+                       	<div class="col-lg-8" style="margin: 0px auto">
+         	
+                    <table class="table" style="width:1000px">
+
+    <!--Table head-->
+    <thead style="background: #0D47A1" align="center">
+        <tr class="text-white">
+            
+            <th>Army No.</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Relation</th>
+            <th>Rank</th>
+        
+            <th>Department</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <!--Table head-->
+
+    <!--Table body-->
+    <tbody>
+      <?php
+      
+      $doctor=new DoctorController();
+         $row=$doctor->getAllConsultedPatients();
+       $row= array_unique($row->fetchAll(PDO::FETCH_ASSOC), SORT_REGULAR);
+      //  $row= array_unique($row, SORT_REGULAR);
+              foreach ($row as $patient_data) {
+                ?>
+                <tr class="text-center">
+                    
+                    
+                  <td><?php echo $patient_data['army_no']; ?></td>
+                   <td><?php echo $patient_data['relation_fname']; ?></td>
+                  <td><?php echo $patient_data['relation_lname']; ?></td>
+                  <td><?php echo $patient_data['relation']; ?></td>
+                   <td><?php echo $patient_data['rank']; ?></td>
+                  
+                  
+                    <td><?php echo $patient_data['dname']; ?></td>
+                    
+                     <td>
+                      <a href="ViewPatientReport.php?personId=<?php echo $patient_data['person_id'];?>&doctorId=<?php echo $patient_data["dno"];?>&doctorName=<?php echo $patient_data["doctor_name"]?>" class="btn btn-danger btn-sm"  >View History</a>
+                  </td>
+                    
+                   
+                  
+                 
+                </tr>
+                <?php
+              }
+
+       ?>
+    </tbody>
+    <!--Table body-->
+
+</table>
+    
          	</div>
-         </div>
-     </div>
-     <!--/.Panel 2-->
+            </div>
+        </div>
      
- </div>
-   
-		
+</div>		
        <div class="modal fade" id="centralModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-notify modal-success" role="document">
     <!--Content-->
@@ -389,37 +385,6 @@ select {
   <script type="text/javascript" src="js/mdb.min.js"></script>-->
   <script type="text/javascript" src="js/compiled.min.js"></script>
   <script type="text/javascript" src="js/jquery.validate.js"></script>
-  <script type="text/javascript">
-     $(document).ready(function(){
-         $('#selectbox2').change(function(){
-          $("#doctor_select_box").find('option').not(':first').remove();
-               
-                var did = $('#selectbox2').val();
-                var datastring="did="+did+"&getdoctors="+"yes";
-                  $.ajax({
-      type:"POST",
-      url:"../Controller/ReceptionistController.php",
-      data:datastring,
-      success:function(result){
-      console.log(result);
-        var obj=JSON.parse(result);
-       var end= $('#doctor_select_box')
-    .find('option')
-    .remove()
-    .end();
-    end.append('<option value="" selected disabled>Doctor</option>');
-        for (var i = 0; i < obj.length; i++) {
-            
-    end.append('<option value="'+obj[i].doctor_army_no+'">'+obj[i].drank+' '+obj[i].dfname+' '+obj[i].dlname+'</option>');
-    
-
-        }
-          
-      }
-     });
-         });
-     });
-   </script>
   <script>
    $(document).ready(function(){
        $("#getdependents").click(function() {
@@ -433,7 +398,7 @@ select {
    
   
    
- // alert("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
+ // //("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
  
    var datastring="army_no="+army_no+"&getDependents="+"yes";
      $.ajax({
@@ -516,13 +481,10 @@ select {
   </script>
    <script type="text/javascript">
    $(document).ready(function(){
-      $( "#loginform" ).validate({
+      $( "#showAnalysi" ).validate({
         rules: {
           
           selectbox2: {
-            required: true
-          },
-          doctor_select_box: {
             required: true
           },
           password: {
@@ -558,9 +520,7 @@ select {
           }
         },
         messages: {
-           doctor_select_box:{
-               required:" Please select doctor"
-           },
+          
           army_no: {
             required: "Army number is required"
           },
@@ -573,8 +533,8 @@ select {
           lname: {
             required: "Last name is required"
           },
-          selectbox2: {
-            required: "Department is required"
+          email: {
+            required: "Email is required"
           },
           mobile: {
             required: "Mobile is required"
@@ -597,21 +557,36 @@ select {
         } ,
 
      submitHandler: function(form) {
-        var person_id=$('input[name=relation]:checked', '#loginform').val(); 
-        var receptionistArmyNo=$("#receptionistArmyNo").val();
+       
         var did=$("#selectbox2").val();
-         var doctor_id=$("#doctor_select_box").val();
-         var datastring="doctorId="+doctor_id+"&personId="+person_id+"&receptionistArmyNo="+receptionistArmyNo+"&did="+did+"&addPatient=yes";
-       console.log(datastring);
-        $.ajax({
+         var datastring="departmentId="+did+"&showAnalysis=yes";
+        
+     $.ajax({
       type:"POST",
-      url:"../Controller/ReceptionistController.php",
+      url:"../Controller/AdminController.php",
       data:datastring,
       success:function(result){
-        //  console.log(result);
-          document.getElementById("patientNumber").innerHTML="Patient number is "+result;
-          $('#centralModalSuccess').modal('show');
-      }
+       
+         var Obj=JSON.parse(result);
+         
+         var totalPatients=Obj[0];
+         var consultedPatients=Obj[1];
+         var container=document.getElementById("analysisContainer");
+                while (container.firstChild) {
+                 container.removeChild(container.firstChild);
+                 }
+           
+            span=document.createElement("span"); 
+            span.setAttribute("class","badge badge-success");
+            span.setAttribute("style","font-size:20px");
+            span.innerHTML="Total number of patients registered today in "+totalPatients[0].dname+" till now is "+totalPatients[0].countTotal;
+            span1=document.createElement("span"); 
+            span1.setAttribute("class","badge badge-warning");
+            span1.innerHTML="Total number of patients consulted today in "+consultedPatients[0].dname+" till now is "+consultedPatients[0].countConsulted;
+            span1.setAttribute("style","font-size:20px");
+            container.appendChild(span);
+            container.appendChild(span1);
+    }
      });
 
   },

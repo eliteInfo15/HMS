@@ -8,6 +8,7 @@ if (isset($_GET)) {
       $relation=$_GET["relation"]; 
       $fname=$_GET["fname"]; 
       $lname=$_GET["lname"]; 
+      $doctor=$_GET["doctor"];
 }
 
 ?>
@@ -22,7 +23,7 @@ if (isset($_GET)) {
         <h3>Relation : <?php echo $relation ?></h3> 
         <h3>Department : <?php echo $department ?></h3> 
         <h3>Date : <?php echo $date ?></h3> 
-        
+        <h3>Doctor: <?php echo $doctor ?></h3>
         
     </body>
 </html>

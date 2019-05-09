@@ -111,8 +111,8 @@ class DoctorModel{
     }
 
     
-        public function addDoctor() {
-        $addDoctorQuery="insert into doctor values ('$this->armyNo','$this->firstName','$this->lastName','$this->mobileNo','$this->gender','$this->email','$this->rank','$this->dateOfJoining','$this->dateOfBirth');";
+        public function addDoctor($previousDoctor,$previousDoctorRank) {
+        $addDoctorQuery="insert into doctor values ('$this->armyNo','$this->firstName','$this->lastName','$this->mobileNo','$this->gender','$this->email','$this->rank','$this->dateOfJoining','$this->dateOfBirth','$previousDoctor','$previousDoctorRank');";
         $result=Database::insert($addDoctorQuery);
         DoctorModel::$login->addLoginInfo();
         $departmentIdArray=DoctorModel::$department->getDepartmentId();
@@ -123,6 +123,11 @@ class DoctorModel{
         }
         return $result;
         }
+        public function getDoctorsByDepartment($did) {
+            $get="select doctor.doctor_army_no,dfname,dlname,drank from doctor,doctor_speciality where doctor.doctor_army_no=doctor_speciality.army_no and doctor_speciality.did='$did'";
+            $rs= Database::read($get);
+             return $rs->fetchAll(PDO::FETCH_ASSOC);   
+            }
         public function getAllDoctors() {
             $getAllDoctors="select * from doctor";
             $result=Database::read($getAllDoctors);
@@ -142,21 +147,51 @@ class DoctorModel{
             return $result;
         }
 
-        public function saveOPDData($patient_id,$doctor_id,$tests,$comments,$category,$status,$medicine) {
+        public function saveOPDData($patient_id,$doctor_id,$tests,$comments,$category,$status) {
+            $currentDate=date('Y-m-d');
             if (count($tests)>0) {
               foreach ($tests as $test) {
-               $save="insert into opd(patient_id,doctor_army_no,test_id,comments,category,medicine,test_completed) values('$patient_id','$doctor_id','$test','$comments','$category','$medicine','$status')";
+               $save="insert into opd(patient_id,doctor_army_no,test_id,comments,category,test_completed,opd_date) values('$patient_id','$doctor_id','$test','$comments','$category','$status','$currentDate')";
                $result=Database::insert($save);
+               
             }  
+           
             }
             else{
-                $save="insert into opd(patient_id,doctor_army_no,comments,category,medicine) values('$patient_id','$doctor_id','$comments','$category','$medicine')";
+                $save="insert into opd(patient_id,doctor_army_no,comments,category,opd_date) values('$patient_id','$doctor_id','$comments','$category',' $currentDate')";
                $result=Database::insert($save);
             }
-            
+             $update="update patient set consulted=1 where patient_id='$patient_id' ";
+             echo $update;
+            Database::update($update);
             return $result;
         }
         
+        public function prescribeMedicine($patientId,$medicineId,$dosageId,$instructionId,$days,$doctorId) {
+            $prescribeMedicineQuery="insert into patient_medicine_prescription values('$patientId','$medicineId','$dosageId','$instructionId','$doctorId','$days')";
+            return Database::insert($prescribeMedicineQuery);
+            } 
+            
+            public function changePassword($doctorId,$currentPassword,$newPassword) {
+               $matchCurrentPassword="select password from login where role='doctor' and army_no='$doctorId'";
+              $result= Database::read($matchCurrentPassword);
+               if ($data=$result->fetch(PDO::FETCH_ASSOC)) 
+               {
+              if (password_verify($currentPassword,$data['password']))
+              {
+                  $passwordHash=password_hash($newPassword,PASSWORD_BCRYPT);
+                  $changePassword="update login set password='$passwordHash' where army_no='$doctorId' ";
+                  Database::update($changePassword);
+                  return 1;
+              }
+              else{
+                  return 0;
+              }
+              }
+           else{
+               return 0;
+           }
+            }
             }
 
 

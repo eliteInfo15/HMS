@@ -72,6 +72,13 @@ class PathologistController{
        $test->updateTestCompletedStatus($patientId,$testId);
        return $rs;
     }
+     public function changePassword() {
+       $currentPassword= $_POST["currentPassword"];
+        $newPassword= $_POST["newPassword"];
+        $pathologistId= $_POST["pathologistId"];
+        $pathologist=new PathologistModel();
+       return $pathologist->changePassword($pathologistId,$currentPassword,$newPassword);
+    }
 }
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -107,4 +114,8 @@ if (isset($_POST["denyTest"])) {
    $p= new PathologistController();
    $r=$p->denyTestResult();
   echo $r;
+}
+if (isset($_POST["changePassword"])) {
+   $p= new PathologistController();
+  echo $p->changePassword();
 }

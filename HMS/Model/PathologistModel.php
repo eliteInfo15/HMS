@@ -134,6 +134,26 @@ class PathologistModel{
             }
             return $result;
         }
+         public function changePassword($pathologistId,$currentPassword,$newPassword) {
+               $matchCurrentPassword="select password from login where role='pathologist' and army_no='$pathologistId'";
+              $result= Database::read($matchCurrentPassword);
+               if ($data=$result->fetch(PDO::FETCH_ASSOC)) 
+               {
+              if (password_verify($currentPassword,$data['password']))
+              {
+                  $passwordHash=password_hash($newPassword,PASSWORD_BCRYPT);
+                  $changePassword="update login set password='$passwordHash' where army_no='$pathologistId' ";
+                  Database::update($changePassword);
+                  return 1;
+              }
+              else{
+                  return 0;
+              }
+              }
+           else{
+               return 0;
+           }
+            }
         
 }
 /* 

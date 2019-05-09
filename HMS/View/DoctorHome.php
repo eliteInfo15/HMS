@@ -19,6 +19,7 @@ else{
 <head>
 	<meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <meta http-equiv="refresh" content="300">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Hospital Management System</title>
   <!-- Font Awesome -->
@@ -70,6 +71,7 @@ em{
 .login_error{
   color: red;
 }
+
 .gender-container{
  // display: block;
   margin: 2px;
@@ -93,7 +95,7 @@ select {
 
                 <!-- Navbar -->
         <nav class="mb-1 navbar navbar-expand-lg z-depth-2 navbar-fixed-top">
-            <a class="navbar-brand" href="AdminHome.php" style="color: black;"><img src="images/icon.png" style="width: 50px;height: 50px">  Hospital Management System</a>
+            <a class="navbar-brand" href="DoctorHome.php" style="color: black;"><img src="images/icon.png" style="width: 50px;height: 50px">  Hospital Management System</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fa fa-bars" style="color: black;"></i>
                         </button>
@@ -117,6 +119,9 @@ select {
                         		</div>
                         	</form>
                         	</li>
+                                <li class="nav-item">
+                                    <a href="ChangeDoctorPassword.php?doctorId=<?php echo $_SESSION["armyNumberSession"];?>" class="btn indigo btn-rounded btn-md my-2 my-sm-0 ml-3" style="color: white"><i class="fa fa-pencil" style="font-size: 15px"></i> Change Password</a> 
+                                </li>
                         
                         
                     </ul>
@@ -139,11 +144,19 @@ select {
 ?>
 
 <main id="dash1" class="smooth" style="padding-top: 0px;padding-left: 0px">
-    <div class="row" style="background: white">
-        <div class="container text-center" style="margin-top: 30px;">
-            <h2>Consult Patients</h2>
-        </div>
-         	<div class="col-lg-8" style="margin: 30px auto">
+     <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+     <li class="nav-item">
+         <a class="nav-link active" id="tab1" data-toggle="tab" href="#panel5" role="tab"><i class="fa fa-user-md"></i> Consult Patients</a>
+     </li> 
+     <li class="nav-item">
+         <a class="nav-link" id="tab2" data-toggle="tab" href="#panel6" role="tab"><i class="fa fa-eye"></i> Patient history</a>
+     </li>
+    
+ </ul>
+    <div class="tab-content">
+    <div class="row tab-pane fade in show active" style="background: white" id="panel5" role="tabpanel" aria-labelledby="tab1">
+      
+         	<div class="col-lg-8" style="margin: 0px auto">
          	
                     <table class="table" style="width:1000px">
 
@@ -168,10 +181,11 @@ select {
       <?php
       
       $doctor=new DoctorController();
-         $row=$doctor->getPatientsByDepartment($deptIdArray);
+         $row=$doctor->getPatientsByDepartment($deptIdArray,$doctorArmyNo);
               foreach ($row as $patient_data) {
                 ?>
                 <tr class="text-center">
+                    <?php $n=$patient_data['consulted'];?>
                      <td><?php echo $patient_data['token']; ?></td>
                   <td><?php echo $patient_data['army_no']; ?></td>
                    <td><?php echo $patient_data['relation_fname']; ?></td>
@@ -181,8 +195,23 @@ select {
                   
                    <td><?php echo $patient_data['date_of_birth']; ?></td>
                     <td><?php echo $patient_data['dname']; ?></td>
-                  <td>
-                      <a href="Consult.php?patientId=<?php echo $patient_data['patient_id'];?>&doctorArmyNo=<?php echo $doctorArmyNo;?>&patientArmyNo=<?php echo $patient_data['army_no'];?>&fname=<?php echo $patient_data['relation_fname'];?>&lname=<?php echo $patient_data['relation_lname'];?>&relation=<?php echo $patient_data['relation'];?>&rank=<?php echo $patient_data['rank'];?>&token=<?php echo $patient_data['token'];?>" class="btn btn-danger btn-sm"  target="new" >Consult</a></td>
+                    <?php  
+                      if($n==1){
+                          ?>
+                     <td>
+                      <a href="Consult.php?patientId=<?php echo $patient_data['patient_id'];?>&doctorArmyNo=<?php echo $doctorArmyNo;?>&patientArmyNo=<?php echo $patient_data['army_no'];?>&fname=<?php echo $patient_data['relation_fname'];?>&lname=<?php echo $patient_data['relation_lname'];?>&relation=<?php echo $patient_data['relation'];?>&rank=<?php echo $patient_data['rank'];?>&token=<?php echo $patient_data['token'];?>" class="btn btn-danger btn-sm disabled"  >Consult</a>
+                  </td>
+                    <?php
+                      }
+                      else{
+                         ?>
+                   <td>
+                      <a href="Consult.php?patientId=<?php echo $patient_data['patient_id'];?>&doctorArmyNo=<?php echo $doctorArmyNo;?>&patientArmyNo=<?php echo $patient_data['army_no'];?>&fname=<?php echo $patient_data['relation_fname'];?>&lname=<?php echo $patient_data['relation_lname'];?>&relation=<?php echo $patient_data['relation'];?>&rank=<?php echo $patient_data['rank'];?>&token=<?php echo $patient_data['token'];?>" class="btn btn-danger btn-sm"   >Consult</a>
+                  </td>
+                  <?php
+                      }
+                    ?>
+                 
                 </tr>
                 <?php
               }
@@ -194,8 +223,155 @@ select {
 </table>
     
          	</div>
+                <div class="container " style="margin: 0px auto">
+                <div class="col-lg-12">
+                       <div  id="visualization" style="width: 100%;height: 400px;background: white">
+                    
+        <?php
+ 
+    //include database connection
+    require_once '../Model/Database.php';
+    Database::connectDb();
+   $get="select count(*) as num, consulted from patient where patient.doctor_army_no='$doctorArmyNo' and date=date(now()) group by consulted";
+                      
+                    
+                       $rs= Database::read($get);
+                      $analysisData=$rs->fetchAll(PDO::FETCH_ASSOC);
+    //query all records from the database
+   
+ 
+    //execute the query
+  
+ 
+    //get number of rows returned
+    
+ 
+    if( $analysisData){
+ for ($index = 0; $index < count($analysisData); $index++)
+                        {
+                            if($analysisData[$index]["consulted"]=='1') {
+                                $analysisData[$index]["consulted"]='Consulted';
+                            }
+                            else{
+                                $analysisData[$index]["consulted"]='Not consulted';
+                            }
+                        }
+                        
+                     
+    ?>
+     
+        <!-- load api -->
+        <script type="text/javascript" src="js/jsapi.js"></script>
+        
+        <script type="text/javascript">
+            //load package
+            google.load('visualization', '1', {packages: ['corechart']});
+        </script>
+ 
+        <script type="text/javascript">
+            function drawVisualization() {
+              
+                  // Create and populate the data table.
+                var data = google.visualization.arrayToDataTable([
+                    ['Consulted', 'Number of patient Consulted'],
+                    <?php
+              foreach($analysisData as $row){
+                  //
+                        extract($row);
+                        echo "['{$consulted}', {$num}],";
+                    }
+                    ?>
+                ]);
+ 
+                // Create and draw the visualization.
+                new google.visualization.PieChart(document.getElementById('visualization')).
+                draw(data, {title:"Pie chart indicating number of patients consulted today till now  "});
+           
+    
+            }
+ 
+            google.setOnLoadCallback(drawVisualization);
+        </script>
+       
+    <?php
+ 
+    }else{
+        echo "No data found ";
+    }
+    ?>
+        
+            </div>
+                    </div>
+            </div>
+          
          </div>
-		
+        <div class="tab-pane fade" id="panel6" role="tabpanel" aria-labelledby="tab2">
+            
+            <div class="container-fluid" style="background: white">
+                       	<div class="col-lg-8" style="margin: 0px auto">
+         	
+                    <table class="table" style="width:1000px">
+
+    <!--Table head-->
+    <thead style="background: #0D47A1" align="center">
+        <tr class="text-white">
+            
+            <th>Army No.</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Relation</th>
+            <th>Rank</th>
+        
+            <th>Department</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <!--Table head-->
+
+    <!--Table body-->
+    <tbody>
+      <?php
+      
+      $doctor=new DoctorController();
+         $row=$doctor->getAllConsultedPatientsByDoctor($doctorArmyNo);
+       $row= array_unique($row->fetchAll(PDO::FETCH_ASSOC), SORT_REGULAR);
+      //  $row= array_unique($row, SORT_REGULAR);
+              foreach ($row as $patient_data) {
+                ?>
+                <tr class="text-center">
+                    
+                    
+                  <td><?php echo $patient_data['army_no']; ?></td>
+                   <td><?php echo $patient_data['relation_fname']; ?></td>
+                  <td><?php echo $patient_data['relation_lname']; ?></td>
+                  <td><?php echo $patient_data['relation']; ?></td>
+                   <td><?php echo $patient_data['rank']; ?></td>
+                  
+                  
+                    <td><?php echo $patient_data['dname']; ?></td>
+                    
+                     <td>
+                      <a href="PatientHistory.php?personId=<?php echo $patient_data['person_id'];?>&doctorId=<?php echo $doctorArmyNo;?>" class="btn btn-danger btn-sm"  >View History</a>
+                  </td>
+                    
+                   
+                  
+                 
+                </tr>
+                <?php
+              }
+
+       ?>
+    </tbody>
+    <!--Table body-->
+
+</table>
+    
+         	</div>
+            </div>
+        </div>
+
+</div>		
        <div class="modal fade" id="centralModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-notify modal-success" role="document">
     <!--Content-->
@@ -255,7 +431,7 @@ select {
    
   
    
- // alert("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
+ // //("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
  
    var datastring="army_no="+army_no+"&getDependents="+"yes";
      $.ajax({

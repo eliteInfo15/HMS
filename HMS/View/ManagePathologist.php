@@ -217,7 +217,7 @@ select {
          
          <i class="fa fa-key prefix"></i>
         <input type="password" id="password-field" class="form-control" name="password" data-toggle="password">
-        <label for="password-field">Password</label>
+        <label for="password-field" style="margin-top: -25px">Password</label>
         <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password side-align"></span>
   </div>
         </div>
@@ -432,6 +432,35 @@ select {
   <script type="text/javascript" src="js/compiled.min.js"></script>
  
   <script type="text/javascript" src="js/jquery.validate.js"></script>
+       <script type="text/javascript">
+       $(".toggle-password").click(function() {
+
+  $(this).toggleClass("fa-eye fa-eye-slash");
+  var input = $($(this).attr("toggle"));
+  if (input.attr("type") == "password") {
+    input.attr("type", "text");
+  } else {
+    input.attr("type", "password");
+  }
+});
+   </script>
+  <script>
+      function randomPassword(length) {
+    var chars = "abcdefghijklmnpqrstuvwxyz@%KLMNOP1234567890";
+    var pass = "";
+    for (var x = 0; x < length; x++) {
+        var i = Math.floor(Math.random() * chars.length);
+        pass += chars.charAt(i);
+    }
+    return pass;
+}
+  </script>
+  <script>
+  $(document).ready(function(){
+      var password=randomPassword(8);
+      $("#password-field").val(password);
+  });
+  </script>
   <script type="text/javascript">
     function remove_pathologist_modal(param1 ,param2)
 {
@@ -552,7 +581,7 @@ select {
    var role="pathologist";
   
    var gender=$('input[name=gender]:checked', '#loginform').val(); 
- // alert("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
+ // //("&firstName="+fname+"&lastName="+lname+"&city="+city+"&email="+email+"&mobile="+mobile+"&Rank="+Rank+"&dob="+dob+"&requestFor=addDoctor"+"&gender="+gender+"&department="+selected_departments+"&doj="+doj);
  
    var datastring="pathologistRole="+pathologistRole+"&army_no="+army_no+"&role="+role+"&password="+password+"&firstName="+fname+"&lastName="+lname+"&email="+email+"&mobile="+mobile+"&rank="+Rank+"&dob="+dob+"&addPathologist=addPathologist"+"&gender="+gender+"&doj="+doj;
 

@@ -91,7 +91,7 @@ else{
 
                         <!--Card Data-->
                         <div class="admin-up">
-                            <i class="fa fa-user indigo"></i>
+                            <i class="fa fa-user-md indigo"></i>
                             <div class="data">
                                 <p>
                                 	DOCTORS
@@ -243,17 +243,203 @@ else{
                     </div>
                     <!--/.Card-->
                 </div>
+                 <div class="col-xl-3 col-md-6 mb-4">
+                    <!--Card-->
+                    <div class="card card-cascade cascading-admin-card">
+
+                        <!--Card Data-->
+                        <div class="admin-up">
+                            <i class="fa fa-medkit indigo"></i>
+                            <div class="data">
+                                <p>
+                                	MEDICINES
+                                </p>
+                                
+                            </div>
+                        </div>
+                        <!--/.Card Data-->
+
+                        <!--Card content-->
+                        <div class="card-body card-body-cascade text-center">
+                            <a href="ManageMedicines.php" class="btn indigo btn-rounded">Manage Medicines</a>
+                            <!--Text-->
+                            <p class="card-text" style="text-align: justify;margin-top: 10px">Here you can add, view Medicines</p>
+                        </div>
+                        <!--/.Card content-->
+
+                    </div>
+                    <!--/.Card-->
+                </div>
+                   <div class="col-xl-3 col-md-6 mb-4">
+                    <!--Card-->
+                    <div class="card card-cascade cascading-admin-card">
+
+                        <!--Card Data-->
+                        <div class="admin-up">
+                            <i class="fa fa-medkit warning-color"></i>
+                            <div class="data">
+                                <p>
+                                	DOSAGE
+                                </p>
+                                
+                            </div>
+                        </div>
+                        <!--/.Card Data-->
+
+                        <!--Card content-->
+                        <div class="card-body card-body-cascade text-center">
+                            <a href="ManageDosage.php" class="btn warning-color btn-rounded">Manage Dosage</a>
+                            <!--Text-->
+                            <p class="card-text" style="text-align: justify;margin-top: 10px">Here you can add, view Dosages</p>
+                        </div>
+                        <!--/.Card content-->
+
+                    </div>
+                    <!--/.Card-->
+                </div>
+                   <div class="col-xl-3 col-md-6 mb-4">
+                    <!--Card-->
+                    <div class="card card-cascade cascading-admin-card">
+
+                        <!--Card Data-->
+                        <div class="admin-up">
+                            <i class="fa fa-medkit indigo"></i>
+                            <div class="data">
+                                <p>
+                                	INSTRUCTIONS
+                                </p>
+                                
+                            </div>
+                        </div>
+                        <!--/.Card Data-->
+
+                        <!--Card content-->
+                        <div class="card-body card-body-cascade text-center">
+                            <a href="ManageDosageInstruction.php" class="btn indigo btn-rounded">Manage Instructions</a>
+                            <!--Text-->
+                            <p class="card-text" style="text-align: justify;margin-top: 10px">Here you can add, view Instructions</p>
+                        </div>
+                        <!--/.Card content-->
+
+                    </div>
+                    <!--/.Card-->
+                </div>
+                      <div class="col-xl-3 col-md-6 mb-4">
+                    <!--Card-->
+                    <div class="card card-cascade cascading-admin-card">
+
+                        <!--Card Data-->
+                        <div class="admin-up">
+                            <i class="fa fa-medkit red"></i>
+                            <div class="data">
+                                <p>
+                                	Patient Report
+                                </p>
+                                
+                            </div>
+                        </div>
+                        <!--/.Card Data-->
+
+                        <!--Card content-->
+                        <div class="card-body card-body-cascade text-center">
+                            <a href="PatientReport.php" class="btn red btn-rounded">Analysis and report</a>
+                            <!--Text-->
+                            <p class="card-text" style="text-align: justify;margin-top: 10px">Here you can view patient's report</p>
+                        </div>
+                        <!--/.Card content-->
+
+                    </div>
+                    <!--/.Card-->
+                </div>
             </div>
             <!-- /.First row -->
 
 	</div>
+    <div class="container-fluid">
+        <div class="row">
+            <a href="MonthlyAnalysis.php" class="btn btn-success " style="margin-left: 20px;">Get Monthly Analysis</a>
+        </div>
+    </div>
+    <div class="container-fluid" id="visualization" style="width: 100%;height: 400px;">
+        <script>
+        <?php
+ 
+    //include database connection
+    require_once '../Controller/AdminController.php';
+   $admin=new AdminController();
+   $result=$admin->getDepartmentWiseNumberOfPatients();
+    //query all records from the database
+   
+ 
+    //execute the query
+  //  var_dump($result);
+ 
+    //get number of rows returned
+    
+ 
+    if( $result){
+ 
+    ?>
+        </script>
+        <!-- load api -->
+        <script type="text/javascript" src="js/jsapi.js"></script>
+        
+        <script type="text/javascript">
+            //load package
+            google.load('visualization', '1', {packages: ['corechart']});
+        </script>
+ 
+        <script type="text/javascript">
+            function drawVisualization() {
+                var d = new Date();
+var month = new Array();
+month[0] = "January";
+month[1] = "February";
+month[2] = "March";
+month[3] = "April";
+month[4] = "May";
+month[5] = "June";
+month[6] = "July";
+month[7] = "August";
+month[8] = "September";
+month[9] = "October";
+month[10] = "November";
+month[11] = "December";
+var n = month[d.getMonth()];
+                // Create and populate the data table.
+                var data = google.visualization.arrayToDataTable([
+                    ['Department', 'Patients'],
+                    <?php
+              foreach($result as $row){
+                        extract($row);
+                        echo "['{$dname}', {$n}],";
+                    }
+                    ?>
+                ]);
+ 
+                // Create and draw the visualization.
+                new google.visualization.PieChart(document.getElementById('visualization')).
+                draw(data, {title:"Pie chart indicating number of patients per department for current month "+n});
+            }
+ 
+            google.setOnLoadCallback(drawVisualization);
+        </script>
+        <script>
+    <?php
+ 
+    }else{
+        echo "No data found ";
+    }
+    ?>
+        </script>
+    </div>
 </main>
 
 
 
 
 <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-  
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
   <!-- Bootstrap tooltips -->
  
   <!-- Bootstrap core JavaScript 
