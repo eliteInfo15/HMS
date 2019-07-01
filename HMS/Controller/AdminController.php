@@ -10,6 +10,7 @@ require_once '../Model/PatientModel.php';
 require_once '../Model/MedicineModel.php';
 require_once '../Model/DosageModel.php';
 require_once '../Model/DosageInstructionModel.php';
+echo 'hello';
 class AdminController{
     public function getPatientReportByDepartment($did) {
        $patient= new PatientModel();
